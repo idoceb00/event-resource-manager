@@ -1,0 +1,38 @@
+# Dependencias
+node_modules/
+
+# Output
+.output
+.vercel
+.netlify
+.wrangler
+build/
+.svelte-kit/
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Env
+.env
+.env.*
+!.env.example
+!.env.test
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# Paraglide (autogenerado, se regenera con el build/dev)
+src/lib/paraglide/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+
+# Cache de inlang (autogenerado)
+project.inlang/cache/
