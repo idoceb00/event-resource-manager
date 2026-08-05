@@ -1,4 +1,4 @@
-@import 'tailwindcss' source(none);
+@import "tailwindcss" source(none);
 @source '../**/*.{svelte,ts}';
 
-@import 'tw-animate-css';
+@import "tw-animate-css";

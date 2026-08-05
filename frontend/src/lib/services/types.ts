@@ -1,10 +1,10 @@
 import type {
-	Employee,
-	Equipment,
-	Event,
-	Reservation,
-	ReservationWithNames
-} from '$lib/types/domain';
+  Employee,
+  Equipment,
+  Event,
+  Reservation,
+  ReservationWithNames,
+} from "$lib/types/domain";
 
 /**
  * Service contracts for the data the UI needs.
@@ -15,22 +15,22 @@ import type {
  */
 
 export interface EventService {
-	getEvents(): Promise<Event[]>;
-	getEvent(id: string): Promise<Event | undefined>;
+  getEvents(): Promise<Event[]>;
+  getEvent(id: string): Promise<Event | undefined>;
 }
 
 export interface EquipmentService {
-	getEquipment(): Promise<Equipment[]>;
+  getEquipment(): Promise<Equipment[]>;
 }
 
 export interface StaffService {
-	getStaff(): Promise<Employee[]>;
+  getStaff(): Promise<Employee[]>;
 }
 
 export interface ReservationService {
-	getReservations(): Promise<ReservationWithNames[]>;
-	getReservationsForEvent(eventId: string): Promise<ReservationWithNames[]>;
-	hasConflict(reservationId: string): Promise<boolean>;
-	/** Avoid client-only consumers importing raw reservations directly. */
-	getRawReservations(): Promise<Reservation[]>;
+  getReservations(): Promise<ReservationWithNames[]>;
+  getReservationsForEvent(eventId: string): Promise<ReservationWithNames[]>;
+  hasConflict(reservationId: string): Promise<boolean>;
+  /** Avoid client-only consumers importing raw reservations directly. */
+  getRawReservations(): Promise<Reservation[]>;
 }

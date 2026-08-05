@@ -1,4 +1,4 @@
-import type { User } from '$lib/types/domain';
+import type { User } from "$lib/types/domain";
 
 /**
  * Shared current-user state. Mocked until authentication is wired to the
@@ -6,12 +6,12 @@ import type { User } from '$lib/types/domain';
  */
 
 const userState = $state<User>({
-	id: 'user-admin',
-	name: 'Usuario administrador'
+  id: "user-admin",
+  name: "Usuario administrador",
 });
 
 export const currentUser = {
-	get user(): User {
-		return userState;
-	}
+  get user(): User {
+    return userState;
+  },
 };

@@ -1,4 +1,10 @@
-import type { Employee, Equipment, Event, Reservation, ReservationWithNames } from '$lib/types/domain';
+import type {
+  Employee,
+  Equipment,
+  Event,
+  Reservation,
+  ReservationWithNames,
+} from "$lib/types/domain";
 
 /**
  * Pure selection/aggregation helpers for the dashboard. Kept out of components
@@ -6,34 +12,37 @@ import type { Employee, Equipment, Event, Reservation, ReservationWithNames } fr
  */
 
 export function getUpcomingEvents(events: Event[], limit = 5): Event[] {
-	return events
-		.filter((event) => new Date(event.startDate) >= new Date())
-		.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
-		.slice(0, limit);
+  return events
+    .filter((event) => new Date(event.startDate) >= new Date())
+    .sort(
+      (a, b) =>
+        new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+    )
+    .slice(0, limit);
 }
 
 export function countConflicts(reservations: Reservation[]): number {
-	return reservations.filter((reservation) => reservation.hasConflict).length;
+  return reservations.filter((reservation) => reservation.hasConflict).length;
 }
 
 export function countActiveEquipment(equipment: Equipment[]): number {
-	return equipment.filter((item) => item.status !== 'inactive').length;
+  return equipment.filter((item) => item.status !== "inactive").length;
 }
 
 export function countActiveStaff(staff: Employee[]): number {
-	return staff.filter((employee) => employee.status === 'active').length;
+  return staff.filter((employee) => employee.status === "active").length;
 }
 
 export function filterEquipmentByStatus(
-	equipment: Equipment[],
-	status: Equipment['status'] | 'all'
+  equipment: Equipment[],
+  status: Equipment["status"] | "all",
 ): Equipment[] {
-	if (status === 'all') return equipment;
-	return equipment.filter((item) => item.status === status);
+  if (status === "all") return equipment;
+  return equipment.filter((item) => item.status === status);
 }
 
 export function getConflictingReservations(
-	reservations: ReservationWithNames[]
+  reservations: ReservationWithNames[],
 ): ReservationWithNames[] {
-	return reservations.filter((reservation) => reservation.hasConflict);
+  return reservations.filter((reservation) => reservation.hasConflict);
 }

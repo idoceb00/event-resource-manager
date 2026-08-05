@@ -1,8 +1,13 @@
-import { mockEquipmentService } from './mock/mockEquipmentService';
-import { mockEventService } from './mock/mockEventService';
-import { mockReservationService } from './mock/mockReservationService';
-import { mockStaffService } from './mock/mockStaffService';
-import type { EquipmentService, EventService, ReservationService, StaffService } from './types';
+import { mockEquipmentService } from "./mock/mockEquipmentService";
+import { mockEventService } from "./mock/mockEventService";
+import { mockReservationService } from "./mock/mockReservationService";
+import { mockStaffService } from "./mock/mockStaffService";
+import type {
+  EquipmentService,
+  EventService,
+  ReservationService,
+  StaffService,
+} from "./types";
 
 /**
  * Public service bindings.
