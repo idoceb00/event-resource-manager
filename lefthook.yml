@@ -1,0 +1,19 @@
+pre-commit:
+  commands:
+    frontend-lint:
+      root: "frontend/"
+      glob: "*.{ts,svelte,js,json,css,md}"
+      run: pnpm exec lint-staged
+    backend-format:
+      root: "backend/"
+      glob: "*.java"
+      run: mvn spotless:apply
+
+pre-push:
+  commands:
+    frontend-tests:
+      root: "frontend/"
+      run: pnpm run test -- --run && pnpm run svelte-check
+    backend-tests:
+      root: "backend/"
+      run: mvn test
