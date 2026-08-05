@@ -20,7 +20,7 @@ pre-push:
   commands:
     frontend-tests:
       root: "frontend/"
-      run: pnpm run test -- --run && pnpm run svelte-check
+      run: pnpm run test -- --run && pnpm run check
     backend-tests:
       root: "backend/"
       run: mvn test
