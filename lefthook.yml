@@ -3,7 +3,7 @@ pre-commit:
     frontend-lint:
       root: "frontend/"
       glob: "*.{ts,svelte,js,json,css,md}"
-      run: pnpm exec eslint {staged_files} --fix && pnpm exec prettier --write {staged_files}
+      run: pnpm exec eslint {staged_files} --fix
       stage_fixed: true
     frontend-format:
       root: "frontend/"
