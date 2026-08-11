@@ -52,7 +52,8 @@ public class EquipmentController {
   public ResponseEntity<EquipmentResponse> create(
       @Valid @RequestBody CreateEquipmentRequest request) {
     Equipment equipment =
-        new Equipment(request.name(), request.category(), request.status(), request.stock());
+        new Equipment(
+            request.name(), request.category(), EquipmentStatus.CATALOGUED, request.stock());
     Equipment saved = equipmentRepository.save(equipment);
     return ResponseEntity.created(URI.create("/api/equipment/" + saved.getId()))
         .body(EquipmentResponse.fromEntity(saved));

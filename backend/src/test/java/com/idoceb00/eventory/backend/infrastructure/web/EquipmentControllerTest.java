@@ -76,8 +76,7 @@ class EquipmentControllerTest {
   @Test
   void create_validRequest_returns201() throws Exception {
     CreateEquipmentRequest request =
-        new CreateEquipmentRequest(
-            "Microphones", EquipmentCategory.SOUND, EquipmentStatus.CATALOGUED, 20);
+        new CreateEquipmentRequest("Microphones", EquipmentCategory.SOUND, 20);
 
     mockMvc
         .perform(
@@ -87,13 +86,13 @@ class EquipmentControllerTest {
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.name").value("Microphones"))
         .andExpect(jsonPath("$.category").value("SOUND"))
+        .andExpect(jsonPath("$.status").value("CATALOGUED"))
         .andExpect(jsonPath("$.stock").value(20));
   }
 
   @Test
   void create_blankName_returns400() throws Exception {
-    CreateEquipmentRequest request =
-        new CreateEquipmentRequest("", EquipmentCategory.SOUND, EquipmentStatus.CATALOGUED, 20);
+    CreateEquipmentRequest request = new CreateEquipmentRequest("", EquipmentCategory.SOUND, 20);
 
     mockMvc
         .perform(
