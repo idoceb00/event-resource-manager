@@ -2,6 +2,7 @@ package com.idoceb00.eventory.backend.infrastructure.web;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -10,6 +11,7 @@ import com.idoceb00.eventory.backend.domain.model.Equipment;
 import com.idoceb00.eventory.backend.domain.model.EquipmentCategory;
 import com.idoceb00.eventory.backend.domain.model.EquipmentStatus;
 import com.idoceb00.eventory.backend.infrastructure.persistence.EquipmentRepository;
+import com.idoceb00.eventory.backend.infrastructure.web.dto.AddStockRequest;
 import com.idoceb00.eventory.backend.infrastructure.web.dto.CreateEquipmentRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -97,6 +99,61 @@ class EquipmentControllerTest {
     mockMvc
         .perform(
             post("/api/equipment")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  void create_duplicateName_returns409() throws Exception {
+    CreateEquipmentRequest request =
+        new CreateEquipmentRequest("Speakers", EquipmentCategory.SOUND, 20);
+
+    mockMvc
+        .perform(
+            post("/api/equipment")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isConflict())
+        .andExpect(jsonPath("$.detail").value("Equipment with name 'Speakers' already exists"));
+  }
+
+  @Test
+  void addStock_validRequest_returnsUpdatedStock() throws Exception {
+    Equipment saved = equipmentRepository.findAll().getFirst();
+    AddStockRequest request = new AddStockRequest(5);
+
+    mockMvc
+        .perform(
+            patch("/api/equipment/" + saved.getId() + "/stock")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.id").value(saved.getId()))
+        .andExpect(jsonPath("$.name").value("Speakers"))
+        .andExpect(jsonPath("$.stock").value(15));
+  }
+
+  @Test
+  void addStock_nonExistingId_returns404() throws Exception {
+    AddStockRequest request = new AddStockRequest(5);
+
+    mockMvc
+        .perform(
+            patch("/api/equipment/999/stock")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isNotFound());
+  }
+
+  @Test
+  void addStock_zeroQuantity_returns400() throws Exception {
+    Equipment saved = equipmentRepository.findAll().getFirst();
+    AddStockRequest request = new AddStockRequest(0);
+
+    mockMvc
+        .perform(
+            patch("/api/equipment/" + saved.getId() + "/stock")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isBadRequest());

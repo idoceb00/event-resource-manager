@@ -1,5 +1,6 @@
 package com.idoceb00.eventory.backend.infrastructure.web.exception;
 
+import com.idoceb00.eventory.backend.domain.service.DuplicateEquipmentException;
 import com.idoceb00.eventory.backend.domain.service.EntityNotFoundException;
 import com.idoceb00.eventory.backend.domain.service.InsufficientStockException;
 import java.net.URI;
@@ -24,6 +25,14 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(InsufficientStockException.class)
   public ProblemDetail handleConflict(InsufficientStockException ex) {
+    ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+    problem.setTitle("Conflict");
+    problem.setType(URI.create("about:blank"));
+    return problem;
+  }
+
+  @ExceptionHandler(DuplicateEquipmentException.class)
+  public ProblemDetail handleDuplicateEquipment(DuplicateEquipmentException ex) {
     ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
     problem.setTitle("Conflict");
     problem.setType(URI.create("about:blank"));
