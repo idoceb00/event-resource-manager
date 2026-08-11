@@ -74,4 +74,16 @@ public class Event {
     performances.remove(performance);
     performance.setEvent(null);
   }
+
+  public boolean canAddPerformance(Performance candidate) {
+    for (Performance p : performances) {
+      if (p.getName().equals(candidate.getName())
+          && p.getStartTime().equals(candidate.getStartTime())
+          && p.getDuration() == candidate.getDuration()
+          && p.getRehearsalTime().equals(candidate.getRehearsalTime())) {
+        return false;
+      }
+    }
+    return true;
+  }
 }
