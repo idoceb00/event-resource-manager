@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -22,7 +24,13 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long> {
    * not the same equipment row updated. The pessimistic lock serializes access to the equipment's
    * stock during the read-check-insert cycle.
    */
+  boolean existsByName(String name);
+
   @Lock(LockModeType.PESSIMISTIC_WRITE)
   @Query("SELECT e FROM Equipment e WHERE e.id = :id")
   Optional<Equipment> findByIdForUpdate(Long id);
+
+  @Modifying(clearAutomatically = true)
+  @Query("UPDATE Equipment e SET e.stock = e.stock + :quantity WHERE e.id = :id")
+  int addStock(@Param("id") Long id, @Param("quantity") int quantity);
 }
