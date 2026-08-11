@@ -1,0 +1,6 @@
+# Local environment variables with real credentials — never commit this.
+.env
+
+# Postgres data volume, if it ever gets created as a bind mount instead of a named volume.
+pgdata/
+
