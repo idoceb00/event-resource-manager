@@ -1,0 +1,21 @@
+# Development profile: points the backend to the local PostgreSQL container
+# started via docker/docker-compose.yml. Activate with:
+#   mvn -f backend/pom.xml spring-boot:run -Dspring-boot.run.profiles=dev
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/eventory_dev
+    username: eventory
+    password: changeme
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      # TEMPORARY: auto-generates/updates the schema from JPA entities.
+      # Convenient while the domain model is still evolving, but not a
+      # long-term solution — it never removes obsolete columns and can't
+      # express real migrations. Replace with Flyway once the schema
+      # stabilizes.
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
