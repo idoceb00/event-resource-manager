@@ -10,6 +10,7 @@
     class?: string;
     disabled?: boolean;
     "aria-label"?: string;
+    type?: "button" | "submit" | "reset";
   }
 
   let {
@@ -19,6 +20,7 @@
     class: className = "",
     disabled = false,
     "aria-label": ariaLabel,
+    type = "button",
   }: Props = $props();
 
   const variantClass: Record<ButtonVariant, string> = {
@@ -31,7 +33,7 @@
 <button
   {onclick}
   {disabled}
-  type="button"
+  {type}
   aria-label={ariaLabel}
   class="{variantClass[variant]} {className}"
 >
