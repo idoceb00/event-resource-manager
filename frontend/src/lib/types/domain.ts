@@ -66,5 +66,5 @@ export type UserRole = "admin" | "employee";
 export interface User {
   id: string;
   name: string;
-  role?: UserRole;
+  role: UserRole;
 }

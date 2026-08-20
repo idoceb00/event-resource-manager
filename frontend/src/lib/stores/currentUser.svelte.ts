@@ -1,17 +1,29 @@
 import type { User } from "$lib/types/domain";
 
-/**
- * Shared current-user state. Mocked until authentication is wired to the
- * backend; components never fetch or own this state themselves.
- */
+export type SessionStatus = "unknown" | "authenticated" | "anonymous";
 
-const userState = $state<User>({
-  id: "user-admin",
-  name: "Usuario administrador",
-});
+let userState = $state<User | null>(null);
+let statusState = $state<SessionStatus>("unknown");
 
-export const currentUser = {
-  get user(): User {
+export const session = {
+  get user(): User | null {
     return userState;
+  },
+  get status(): SessionStatus {
+    return statusState;
+  },
+
+  setUser(user: User): void {
+    userState = user;
+    statusState = "authenticated";
+  },
+
+  clear(): void {
+    userState = null;
+    statusState = "anonymous";
+  },
+
+  setStatus(status: SessionStatus): void {
+    statusState = status;
   },
 };
