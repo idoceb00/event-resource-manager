@@ -8,6 +8,8 @@ import java.net.URI;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -60,6 +62,23 @@ public class GlobalExceptionHandler {
             .map(GlobalExceptionHandler::formatFieldError)
             .toList();
     problem.setProperty("errors", errors);
+    return problem;
+  }
+
+  @ExceptionHandler(AuthenticationException.class)
+  public ProblemDetail handleAuthentication(AuthenticationException ex) {
+    ProblemDetail problem =
+        ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, "Authentication failed");
+    problem.setTitle("Unauthorized");
+    problem.setType(URI.create("about:blank"));
+    return problem;
+  }
+
+  @ExceptionHandler(AccessDeniedException.class)
+  public ProblemDetail handleAccessDenied(AccessDeniedException ex) {
+    ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, "Access denied");
+    problem.setTitle("Forbidden");
+    problem.setType(URI.create("about:blank"));
     return problem;
   }
 

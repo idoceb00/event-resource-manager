@@ -19,3 +19,11 @@ spring:
       ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
+
+# Local HTTP dev: secure cookie cannot be sent over plain HTTP, so we
+# override it here. In production (HTTPS) this should be true.
+server:
+  servlet:
+    session:
+      cookie:
+        secure: false
