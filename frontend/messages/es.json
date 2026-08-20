@@ -59,5 +59,12 @@
   "eventdetail_performances": "Actuaciones",
   "eventdetail_no_performances": "No hay actuaciones programadas",
   "eventdetail_reservations": "Reservas de recursos ({count})",
-  "eventdetail_no_reservations": "No hay recursos reservados para este evento"
+  "eventdetail_no_reservations": "No hay recursos reservados para este evento",
+  "login_title": "Iniciar sesion",
+  "login_username": "Usuario",
+  "login_password": "Contrasena",
+  "login_submit": "Entrar",
+  "login_error": "Usuario o contrasena incorrectos",
+  "logout": "Salir",
+  "session_expired": "Tu sesion ha expirado"
 }

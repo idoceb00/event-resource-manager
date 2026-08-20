@@ -59,5 +59,12 @@
   "eventdetail_performances": "Performances",
   "eventdetail_no_performances": "No performances scheduled",
   "eventdetail_reservations": "Resource reservations ({count})",
-  "eventdetail_no_reservations": "No resources reserved for this event"
+  "eventdetail_no_reservations": "No resources reserved for this event",
+  "login_title": "Sign in",
+  "login_username": "Username",
+  "login_password": "Password",
+  "login_submit": "Sign in",
+  "login_error": "Invalid username or password",
+  "logout": "Sign out",
+  "session_expired": "Your session has expired"
 }
