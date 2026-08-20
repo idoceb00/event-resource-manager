@@ -4,6 +4,7 @@ import type {
   Event,
   Reservation,
   ReservationWithNames,
+  User,
 } from "$lib/types/domain";
 
 /**
@@ -33,4 +34,10 @@ export interface ReservationService {
   hasConflict(reservationId: string): Promise<boolean>;
   /** Avoid client-only consumers importing raw reservations directly. */
   getRawReservations(): Promise<Reservation[]>;
+}
+
+export interface AuthService {
+  login(username: string, password: string): Promise<User>;
+  logout(): Promise<void>;
+  me(): Promise<User | null>;
 }

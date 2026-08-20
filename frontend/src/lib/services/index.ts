@@ -1,8 +1,10 @@
+import { apiAuthService } from "./api/apiAuthService";
 import { mockEquipmentService } from "./mock/mockEquipmentService";
 import { mockEventService } from "./mock/mockEventService";
 import { mockReservationService } from "./mock/mockReservationService";
 import { mockStaffService } from "./mock/mockStaffService";
 import type {
+  AuthService,
   EquipmentService,
   EventService,
   ReservationService,
@@ -20,3 +22,4 @@ export const eventService: EventService = mockEventService;
 export const equipmentService: EquipmentService = mockEquipmentService;
 export const staffService: StaffService = mockStaffService;
 export const reservationService: ReservationService = mockReservationService;
+export const authService: AuthService = apiAuthService;
