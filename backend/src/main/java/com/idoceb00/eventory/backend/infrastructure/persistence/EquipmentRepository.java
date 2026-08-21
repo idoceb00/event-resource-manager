@@ -33,4 +33,13 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long> {
   @Modifying(clearAutomatically = true)
   @Query("UPDATE Equipment e SET e.stock = e.stock + :quantity WHERE e.id = :id")
   int addStock(@Param("id") Long id, @Param("quantity") int quantity);
+
+  @Modifying(clearAutomatically = true)
+  @Query("UPDATE Equipment e SET e.stock = :stock WHERE e.id = :id")
+  int updateStock(@Param("id") Long id, @Param("stock") int stock);
+
+  @Modifying(clearAutomatically = true)
+  @Query("UPDATE Equipment e SET e.status = :status, e.stock = :stock WHERE e.id = :id")
+  int updateStatusAndStock(
+      @Param("id") Long id, @Param("status") EquipmentStatus status, @Param("stock") int stock);
 }
