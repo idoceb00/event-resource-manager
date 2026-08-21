@@ -1,6 +1,7 @@
 package com.idoceb00.eventory.backend.application.usecase;
 
 import com.idoceb00.eventory.backend.domain.model.Equipment;
+import com.idoceb00.eventory.backend.domain.model.EquipmentStatus;
 import com.idoceb00.eventory.backend.domain.model.Event;
 import com.idoceb00.eventory.backend.domain.model.Reservation;
 import com.idoceb00.eventory.backend.domain.model.ReservationLine;
@@ -42,6 +43,12 @@ public class ReservationService {
         equipmentRepository
             .findByIdForUpdate(equipmentId)
             .orElseThrow(() -> new EntityNotFoundException("Equipment not found: " + equipmentId));
+
+    if (equipment.getStatus() == EquipmentStatus.DECATALOGUED) {
+      throw new InsufficientStockException(
+          String.format(
+              "Cannot reserve equipment '%s': equipment is decatalogued", equipment.getName()));
+    }
 
     int alreadyReserved =
         reservationRepository.sumReservedQuantityByEquipmentAndOverlappingDates(

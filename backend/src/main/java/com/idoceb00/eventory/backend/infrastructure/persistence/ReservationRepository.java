@@ -2,7 +2,9 @@ package com.idoceb00.eventory.backend.infrastructure.persistence;
 
 import com.idoceb00.eventory.backend.domain.model.Event;
 import com.idoceb00.eventory.backend.domain.model.Reservation;
+import com.idoceb00.eventory.backend.domain.model.ReservationLine;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,6 +24,15 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
       @Param("equipmentId") Long equipmentId,
       @Param("startDate") LocalDateTime startDate,
       @Param("endDate") LocalDateTime endDate);
+
+  @Query(
+      "SELECT rl FROM ReservationLine rl "
+          + "JOIN FETCH rl.reservation r "
+          + "JOIN FETCH r.event e "
+          + "WHERE rl.equipment.id = :equipmentId "
+          + "AND e.endDate > :now")
+  List<ReservationLine> findAffectedLinesByEquipment(
+      @Param("equipmentId") Long equipmentId, @Param("now") LocalDateTime now);
 
   Optional<Reservation> findByEvent(Event event);
 }
