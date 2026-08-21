@@ -1,18 +1,18 @@
 package com.idoceb00.eventory.backend.infrastructure.web;
 
+import com.idoceb00.eventory.backend.application.usecase.EquipmentService;
 import com.idoceb00.eventory.backend.domain.model.Equipment;
 import com.idoceb00.eventory.backend.domain.model.EquipmentStatus;
 import com.idoceb00.eventory.backend.domain.service.DuplicateEquipmentException;
 import com.idoceb00.eventory.backend.domain.service.EntityNotFoundException;
 import com.idoceb00.eventory.backend.infrastructure.persistence.EquipmentRepository;
-import com.idoceb00.eventory.backend.infrastructure.web.dto.AddStockRequest;
+import com.idoceb00.eventory.backend.infrastructure.web.dto.AdjustStockRequest;
 import com.idoceb00.eventory.backend.infrastructure.web.dto.CreateEquipmentRequest;
 import com.idoceb00.eventory.backend.infrastructure.web.dto.EquipmentResponse;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,9 +26,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class EquipmentController {
 
   private final EquipmentRepository equipmentRepository;
+  private final EquipmentService equipmentService;
 
-  public EquipmentController(EquipmentRepository equipmentRepository) {
+  public EquipmentController(
+      EquipmentRepository equipmentRepository, EquipmentService equipmentService) {
     this.equipmentRepository = equipmentRepository;
+    this.equipmentService = equipmentService;
   }
 
   @GetMapping
@@ -67,23 +70,22 @@ public class EquipmentController {
         .body(EquipmentResponse.fromEntity(saved));
   }
 
-  /**
-   * Atomic stock replenishment via a single UPDATE statement. Unlike the reservation service which
-   * reads stock, validates a complex rule, then writes, this is a simple increment where no
-   * intermediate read is needed — a plain UPDATE is sufficient and avoids lost updates without
-   * pessimistic locking.
-   */
   @PatchMapping("/{id}/stock")
-  @Transactional
-  public EquipmentResponse addStock(
-      @PathVariable Long id, @Valid @RequestBody AddStockRequest request) {
-    int updated = equipmentRepository.addStock(id, request.quantityToAdd());
-    if (updated == 0) {
-      throw new EntityNotFoundException("Equipment not found: " + id);
-    }
-    return equipmentRepository
-        .findById(id)
-        .map(EquipmentResponse::fromEntity)
-        .orElseThrow(() -> new EntityNotFoundException("Equipment not found: " + id));
+  public EquipmentResponse adjustStock(
+      @PathVariable Long id, @Valid @RequestBody AdjustStockRequest request) {
+    Equipment equipment = equipmentService.adjustStock(id, request.delta());
+    return EquipmentResponse.fromEntity(equipment);
+  }
+
+  @PostMapping("/{id}/decatalogue")
+  public EquipmentResponse decatalogue(@PathVariable Long id) {
+    Equipment equipment = equipmentService.decatalogue(id);
+    return EquipmentResponse.fromEntity(equipment);
+  }
+
+  @PostMapping("/{id}/recatalogue")
+  public EquipmentResponse recatalogue(@PathVariable Long id) {
+    Equipment equipment = equipmentService.recatalogue(id);
+    return EquipmentResponse.fromEntity(equipment);
   }
 }

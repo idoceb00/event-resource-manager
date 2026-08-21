@@ -11,7 +11,7 @@ import com.idoceb00.eventory.backend.domain.model.Equipment;
 import com.idoceb00.eventory.backend.domain.model.EquipmentCategory;
 import com.idoceb00.eventory.backend.domain.model.EquipmentStatus;
 import com.idoceb00.eventory.backend.infrastructure.persistence.EquipmentRepository;
-import com.idoceb00.eventory.backend.infrastructure.web.dto.AddStockRequest;
+import com.idoceb00.eventory.backend.infrastructure.web.dto.AdjustStockRequest;
 import com.idoceb00.eventory.backend.infrastructure.web.dto.CreateEquipmentRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -119,9 +119,9 @@ class EquipmentControllerTest {
   }
 
   @Test
-  void addStock_validRequest_returnsUpdatedStock() throws Exception {
-    Equipment saved = equipmentRepository.findAll().getFirst();
-    AddStockRequest request = new AddStockRequest(5);
+  void adjustStock_positiveDelta_returnsUpdatedStock() throws Exception {
+    Equipment saved = equipmentRepository.findByStatus(EquipmentStatus.CATALOGUED).getFirst();
+    AdjustStockRequest request = new AdjustStockRequest(5);
 
     mockMvc
         .perform(
@@ -135,8 +135,8 @@ class EquipmentControllerTest {
   }
 
   @Test
-  void addStock_nonExistingId_returns404() throws Exception {
-    AddStockRequest request = new AddStockRequest(5);
+  void adjustStock_nonExistingId_returns404() throws Exception {
+    AdjustStockRequest request = new AdjustStockRequest(5);
 
     mockMvc
         .perform(
@@ -147,9 +147,9 @@ class EquipmentControllerTest {
   }
 
   @Test
-  void addStock_zeroQuantity_returns400() throws Exception {
-    Equipment saved = equipmentRepository.findAll().getFirst();
-    AddStockRequest request = new AddStockRequest(0);
+  void adjustStock_zeroDelta_returns400() throws Exception {
+    Equipment saved = equipmentRepository.findByStatus(EquipmentStatus.CATALOGUED).getFirst();
+    AdjustStockRequest request = new AdjustStockRequest(0);
 
     mockMvc
         .perform(
