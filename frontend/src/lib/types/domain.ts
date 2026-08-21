@@ -6,7 +6,9 @@
  * of an HTTP response.
  */
 
-export type EquipmentStatus = "available" | "reserved" | "inactive";
+export type EquipmentCategory = "SOUND" | "LIGHTING" | "MOTORS_AND_STRUCTURES" | "VIDEO";
+
+export type EquipmentStatus = "CATALOGUED" | "DECATALOGUED";
 
 export type EmployeeStatus = "active" | "inactive";
 
@@ -31,9 +33,9 @@ export interface Event {
 export interface Equipment {
   id: string;
   name: string;
-  category: string;
+  category: EquipmentCategory;
   status: EquipmentStatus;
-  serialNumber?: string;
+  stock: number;
 }
 
 export interface Employee {

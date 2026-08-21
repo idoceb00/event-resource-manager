@@ -26,7 +26,7 @@ export function countConflicts(reservations: Reservation[]): number {
 }
 
 export function countActiveEquipment(equipment: Equipment[]): number {
-  return equipment.filter((item) => item.status !== "inactive").length;
+  return equipment.filter((item) => item.status === "CATALOGUED").length;
 }
 
 export function countActiveStaff(staff: Employee[]): number {

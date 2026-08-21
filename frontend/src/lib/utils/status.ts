@@ -9,11 +9,9 @@ export type BadgeVariant = "green" | "blue" | "gray" | "amber" | "red";
 
 export function equipmentStatusVariant(status: EquipmentStatus): BadgeVariant {
   switch (status) {
-    case "available":
+    case "CATALOGUED":
       return "green";
-    case "reserved":
-      return "blue";
-    case "inactive":
+    case "DECATALOGUED":
       return "gray";
   }
 }
