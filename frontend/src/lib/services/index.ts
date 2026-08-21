@@ -1,5 +1,5 @@
 import { apiAuthService } from "./api/apiAuthService";
-import { mockEquipmentService } from "./mock/mockEquipmentService";
+import { apiEquipmentService } from "./api/apiEquipmentService";
 import { mockEventService } from "./mock/mockEventService";
 import { mockReservationService } from "./mock/mockReservationService";
 import { mockStaffService } from "./mock/mockStaffService";
@@ -19,7 +19,7 @@ import type {
  * implementations — no component code changes.
  */
 export const eventService: EventService = mockEventService;
-export const equipmentService: EquipmentService = mockEquipmentService;
+export const equipmentService: EquipmentService = apiEquipmentService;
 export const staffService: StaffService = mockStaffService;
 export const reservationService: ReservationService = mockReservationService;
 export const authService: AuthService = apiAuthService;

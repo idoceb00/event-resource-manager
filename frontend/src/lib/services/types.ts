@@ -1,6 +1,7 @@
 import type {
   Employee,
   Equipment,
+  EquipmentCategory,
   Event,
   Reservation,
   ReservationWithNames,
@@ -22,6 +23,14 @@ export interface EventService {
 
 export interface EquipmentService {
   getEquipment(): Promise<Equipment[]>;
+  getEquipmentById(id: string): Promise<Equipment>;
+  getCatalogue(): Promise<Equipment[]>;
+  createEquipment(data: {
+    name: string;
+    category: EquipmentCategory;
+    stock: number;
+  }): Promise<Equipment>;
+  addStock(id: string, quantityToAdd: number): Promise<Equipment>;
 }
 
 export interface StaffService {
