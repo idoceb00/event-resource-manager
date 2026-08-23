@@ -137,4 +137,10 @@ public class EventController {
     eventRepository.save(event);
     return ResponseEntity.noContent().build();
   }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> delete(@PathVariable Long id) {
+    eventService.deleteEvent(id);
+    return ResponseEntity.noContent().build();
+  }
 }

@@ -86,4 +86,15 @@ public class EventService {
 
     return eventRepository.save(event);
   }
+
+  @Transactional
+  public void deleteEvent(Long id) {
+    Event event =
+        eventRepository
+            .findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Event not found: " + id));
+
+    reservationRepository.deleteByEventId(id);
+    eventRepository.delete(event);
+  }
 }
