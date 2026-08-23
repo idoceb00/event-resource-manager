@@ -3,6 +3,7 @@ import type {
   Equipment,
   EquipmentCategory,
   Event,
+  Performance,
   Reservation,
   ReservationWithNames,
   User,
@@ -19,6 +20,35 @@ import type {
 export interface EventService {
   getEvents(): Promise<Event[]>;
   getEvent(id: string): Promise<Event | undefined>;
+  createEvent(data: {
+    name: string;
+    startDate: string;
+    endDate: string;
+    address?: string;
+    transport: boolean;
+    extraInfo?: string;
+  }): Promise<Event>;
+  updateEvent(
+    id: string,
+    data: {
+      name?: string;
+      startDate?: string;
+      endDate?: string;
+      address?: string;
+      transport?: boolean;
+      extraInfo?: string;
+    },
+  ): Promise<Event>;
+  createPerformance(
+    eventId: string,
+    data: {
+      name: string;
+      startTime: string;
+      duration: number;
+      rehearsalTime: string;
+    },
+  ): Promise<Performance>;
+  deletePerformance(eventId: string, performanceId: string): Promise<void>;
 }
 
 export interface EquipmentService {

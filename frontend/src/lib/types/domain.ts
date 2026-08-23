@@ -14,10 +14,10 @@ export type EmployeeStatus = "active" | "inactive";
 
 export interface Performance {
   id: string;
-  eventId: string;
   name: string;
-  date: string;
-  time: string;
+  startTime: string;
+  duration: number;
+  rehearsalTime: string;
 }
 
 export interface Event {
@@ -25,8 +25,9 @@ export interface Event {
   name: string;
   startDate: string;
   endDate: string;
-  location: string;
-  transportInfo?: string;
+  address: string;
+  transport: boolean;
+  extraInfo?: string;
   performances: Performance[];
 }
 

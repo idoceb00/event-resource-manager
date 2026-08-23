@@ -16,7 +16,9 @@
 <div class="p-6 max-w-7xl">
   <div class="flex items-center justify-between mb-6">
     <h1>{m.events()}</h1>
-    <Button>{m.events_new()}</Button>
+    <a href={resolve(localizeHref("/events/new") as "/events/new")}>
+      <Button>{m.events_new()}</Button>
+    </a>
   </div>
 
   <DataTable
@@ -66,7 +68,7 @@
 {/snippet}
 
 {#snippet locationCell(row: EventRow)}
-  {row.event.location}
+  {row.event.address}
 {/snippet}
 
 {#snippet performancesCell(row: EventRow)}

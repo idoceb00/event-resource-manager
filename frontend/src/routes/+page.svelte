@@ -52,7 +52,7 @@
             <div>
               <div class="font-medium text-neutral-900">{event.name}</div>
               <div class="text-sm text-neutral-600 mt-0.5">
-                {event.location}
+                {event.address}
               </div>
             </div>
             <div class="text-sm text-neutral-600">
