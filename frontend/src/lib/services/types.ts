@@ -30,7 +30,9 @@ export interface EquipmentService {
     category: EquipmentCategory;
     stock: number;
   }): Promise<Equipment>;
-  addStock(id: string, quantityToAdd: number): Promise<Equipment>;
+  adjustStock(id: string, delta: number): Promise<Equipment>;
+  decatalogue(id: string): Promise<Equipment>;
+  recatalogue(id: string): Promise<Equipment>;
 }
 
 export interface StaffService {

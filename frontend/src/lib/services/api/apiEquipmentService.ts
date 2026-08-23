@@ -20,8 +20,8 @@ interface CreateEquipmentRequest {
   stock: number;
 }
 
-interface AddStockRequest {
-  quantityToAdd: number;
+interface AdjustStockRequest {
+  delta: number;
 }
 
 function mapEquipment(response: BackendEquipmentResponse): Equipment {
@@ -71,11 +71,25 @@ export const apiEquipmentService: EquipmentService = {
     return mapEquipment(response);
   },
 
-  async addStock(id: string, quantityToAdd: number): Promise<Equipment> {
-    const body: AddStockRequest = { quantityToAdd };
+  async adjustStock(id: string, delta: number): Promise<Equipment> {
+    const body: AdjustStockRequest = { delta };
     const response = await apiClient.patch<BackendEquipmentResponse>(
       `/api/equipment/${id}/stock`,
       body,
+    );
+    return mapEquipment(response);
+  },
+
+  async decatalogue(id: string): Promise<Equipment> {
+    const response = await apiClient.post<BackendEquipmentResponse>(
+      `/api/equipment/${id}/decatalogue`,
+    );
+    return mapEquipment(response);
+  },
+
+  async recatalogue(id: string): Promise<Equipment> {
+    const response = await apiClient.post<BackendEquipmentResponse>(
+      `/api/equipment/${id}/recatalogue`,
     );
     return mapEquipment(response);
   },
