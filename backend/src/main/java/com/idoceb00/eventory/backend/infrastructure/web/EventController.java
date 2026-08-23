@@ -1,5 +1,6 @@
 package com.idoceb00.eventory.backend.infrastructure.web;
 
+import com.idoceb00.eventory.backend.application.usecase.EventService;
 import com.idoceb00.eventory.backend.domain.model.Event;
 import com.idoceb00.eventory.backend.domain.model.Performance;
 import com.idoceb00.eventory.backend.domain.service.DuplicatePerformanceException;
@@ -9,12 +10,14 @@ import com.idoceb00.eventory.backend.infrastructure.web.dto.CreateEventRequest;
 import com.idoceb00.eventory.backend.infrastructure.web.dto.CreatePerformanceRequest;
 import com.idoceb00.eventory.backend.infrastructure.web.dto.EventResponse;
 import com.idoceb00.eventory.backend.infrastructure.web.dto.PerformanceResponse;
+import com.idoceb00.eventory.backend.infrastructure.web.dto.UpdateEventRequest;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,9 +29,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class EventController {
 
   private final EventRepository eventRepository;
+  private final EventService eventService;
 
-  public EventController(EventRepository eventRepository) {
+  public EventController(EventRepository eventRepository, EventService eventService) {
     this.eventRepository = eventRepository;
+    this.eventService = eventService;
   }
 
   @GetMapping
@@ -45,8 +50,17 @@ public class EventController {
     return EventResponse.fromEntity(event);
   }
 
+  @PatchMapping("/{id}")
+  public EventResponse update(@PathVariable Long id, @RequestBody UpdateEventRequest request) {
+    Event updated = eventService.updateEvent(id, request);
+    return EventResponse.fromEntity(updated);
+  }
+
   @PostMapping
   public ResponseEntity<EventResponse> create(@Valid @RequestBody CreateEventRequest request) {
+    if (request.startDate().isAfter(request.endDate())) {
+      throw new IllegalArgumentException("Event end date must be after start date");
+    }
     Event event =
         new Event(
             request.name(),

@@ -35,4 +35,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
       @Param("equipmentId") Long equipmentId, @Param("now") LocalDateTime now);
 
   Optional<Reservation> findByEvent(Event event);
+
+  @Query(
+      "SELECT DISTINCT rl.equipment.id FROM ReservationLine rl "
+          + "JOIN rl.reservation r WHERE r.event.id = :eventId")
+  List<Long> findDistinctEquipmentIdsByEventId(@Param("eventId") Long eventId);
 }
