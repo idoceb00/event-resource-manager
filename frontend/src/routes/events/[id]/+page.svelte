@@ -1,5 +1,6 @@
 <script lang="ts">
   import { AlertTriangle, Pencil, Trash2, Plus } from "@lucide/svelte";
+  import { goto } from "$app/navigation";
   import { resolve } from "$app/paths";
   import { invalidateAll } from "$app/navigation";
   import Button from "$lib/components/ui/Button.svelte";
@@ -64,6 +65,20 @@
       // silent
     }
   }
+
+  let showDeleteConfirm = $state(false);
+  let deleteLoading = $state(false);
+
+  async function handleDeleteEvent() {
+    deleteLoading = true;
+    try {
+      await eventService.deleteEvent(event.id);
+      goto(resolve(localizeHref("/events") as "/events"));
+    } catch {
+      showDeleteConfirm = false;
+      deleteLoading = false;
+    }
+  }
 </script>
 
 <div class="p-6">
@@ -76,14 +91,36 @@
     </a>
     <div class="flex items-center justify-between">
       <h1 class="text-2xl">{event.name}</h1>
-      <a
-        href={resolve(localizeHref(`/events/${event.id}/edit`) as "/events/[id]/edit", { id: event.id })}
-      >
-        <Button variant="secondary">
-          <Pencil class="w-4 h-4 mr-1" />
-          {m.event_form_edit_title()}
-        </Button>
-      </a>
+      <div class="flex items-center gap-2">
+        {#if showDeleteConfirm}
+          <span class="text-sm text-neutral-600">
+            {m.event_delete_confirm_body({
+              name: event.name,
+              performances: String(event.performances.length),
+              reservations: String(reservations.length),
+            })}
+          </span>
+          <Button onclick={handleDeleteEvent} disabled={deleteLoading}>
+            {deleteLoading ? "..." : m.event_delete_confirm_title()}
+          </Button>
+          <Button variant="icon" onclick={() => (showDeleteConfirm = false)}>
+            &times;
+          </Button>
+        {:else}
+          <a
+            href={resolve(localizeHref(`/events/${event.id}/edit`) as "/events/[id]/edit", { id: event.id })}
+          >
+            <Button variant="secondary">
+              <Pencil class="w-4 h-4 mr-1" />
+              {m.event_form_edit_title()}
+            </Button>
+          </a>
+          <Button variant="delete" onclick={() => (showDeleteConfirm = true)}>
+            <Trash2 class="w-4 h-4 mr-1" />
+            {m.event_delete()}
+          </Button>
+        {/if}
+      </div>
     </div>
     <div class="text-gray-600 space-y-1 mt-2">
       <p>

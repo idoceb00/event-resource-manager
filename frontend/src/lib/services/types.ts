@@ -49,6 +49,7 @@ export interface EventService {
     },
   ): Promise<Performance>;
   deletePerformance(eventId: string, performanceId: string): Promise<void>;
+  deleteEvent(id: string): Promise<void>;
 }
 
 export interface EquipmentService {

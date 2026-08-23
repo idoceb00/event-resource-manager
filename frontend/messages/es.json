@@ -142,5 +142,10 @@
   "performance_form_start_time": "Hora de inicio",
   "performance_form_duration": "Duracion (minutos)",
   "performance_form_rehearsal_time": "Hora de ensayo",
-  "performance_form_create_title": "Anadir actuacion"
+  "performance_form_create_title": "Anadir actuacion",
+  "event_delete": "Eliminar evento",
+  "event_delete_confirm_title": "Eliminar evento",
+  "event_delete_confirm_body": "Se eliminara permanentemente el evento \"{name}\", sus {performances} actuacion(es) y sus {reservations} reserva(s). Esta accion no se puede deshacer.",
+  "event_delete_success": "Evento eliminado correctamente",
+  "event_delete_error": "Error al eliminar el evento"
 }

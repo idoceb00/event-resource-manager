@@ -142,5 +142,10 @@
   "performance_form_start_time": "Start time",
   "performance_form_duration": "Duration (minutes)",
   "performance_form_rehearsal_time": "Rehearsal time",
-  "performance_form_create_title": "Add performance"
+  "performance_form_create_title": "Add performance",
+  "event_delete": "Delete event",
+  "event_delete_confirm_title": "Delete event",
+  "event_delete_confirm_body": "The event \"{name}\", its {performances} performance(s) and its {reservations} reservation(s) will be permanently deleted. This action cannot be undone.",
+  "event_delete_success": "Event deleted successfully",
+  "event_delete_error": "Error deleting event"
 }

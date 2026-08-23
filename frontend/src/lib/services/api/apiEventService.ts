@@ -132,4 +132,8 @@ export const apiEventService: EventService = {
       `/api/events/${eventId}/performances/${performanceId}`,
     );
   },
+
+  async deleteEvent(id: string): Promise<void> {
+    await apiClient.delete<void>(`/api/events/${id}`);
+  },
 };

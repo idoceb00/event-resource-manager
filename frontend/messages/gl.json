@@ -142,5 +142,10 @@
   "performance_form_start_time": "Hora de inicio",
   "performance_form_duration": "Duracion (minutos)",
   "performance_form_rehearsal_time": "Hora de ensaio",
-  "performance_form_create_title": "Engadir actuacion"
+  "performance_form_create_title": "Engadir actuacion",
+  "event_delete": "Eliminar evento",
+  "event_delete_confirm_title": "Eliminar evento",
+  "event_delete_confirm_body": "Eliminarase permanentemente o evento \"{name}\", as súas {performances} actuacion(es) e as súas {reservations} reserva(s). Esta accion non se pode desfacer.",
+  "event_delete_success": "Evento eliminado correctamente",
+  "event_delete_error": "Erro ao eliminar o evento"
 }
