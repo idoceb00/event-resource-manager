@@ -1,9 +1,7 @@
 import type {
-  Employee,
   Equipment,
   Event,
   Reservation,
-  ReservationWithNames,
 } from "$lib/types/domain";
 
 /**
@@ -21,16 +19,12 @@ export function getUpcomingEvents(events: Event[], limit = 5): Event[] {
     .slice(0, limit);
 }
 
-export function countConflicts(reservations: Reservation[]): number {
-  return reservations.filter((reservation) => reservation.hasConflict).length;
+export function countReservationLines(reservations: Reservation[]): number {
+  return reservations.reduce((sum, r) => sum + r.lines.length, 0);
 }
 
 export function countActiveEquipment(equipment: Equipment[]): number {
   return equipment.filter((item) => item.status === "CATALOGUED").length;
-}
-
-export function countActiveStaff(staff: Employee[]): number {
-  return staff.filter((employee) => employee.status === "active").length;
 }
 
 export function filterEquipmentByStatus(
@@ -39,10 +33,4 @@ export function filterEquipmentByStatus(
 ): Equipment[] {
   if (status === "all") return equipment;
   return equipment.filter((item) => item.status === status);
-}
-
-export function getConflictingReservations(
-  reservations: ReservationWithNames[],
-): ReservationWithNames[] {
-  return reservations.filter((reservation) => reservation.hasConflict);
 }

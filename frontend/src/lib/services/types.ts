@@ -1,11 +1,9 @@
 import type {
-  Employee,
   Equipment,
   EquipmentCategory,
   Event,
   Performance,
   Reservation,
-  ReservationWithNames,
   User,
 } from "$lib/types/domain";
 
@@ -66,16 +64,28 @@ export interface EquipmentService {
   recatalogue(id: string): Promise<Equipment>;
 }
 
-export interface StaffService {
-  getStaff(): Promise<Employee[]>;
+export interface UserService {
+  getUsers(): Promise<User[]>;
+  getUserById(id: string): Promise<User>;
+}
+
+export interface CreateReservationResult {
+  succeeded: number;
+  failed: number;
+  errors: string[];
 }
 
 export interface ReservationService {
-  getReservations(): Promise<ReservationWithNames[]>;
-  getReservationsForEvent(eventId: string): Promise<ReservationWithNames[]>;
-  hasConflict(reservationId: string): Promise<boolean>;
-  /** Avoid client-only consumers importing raw reservations directly. */
-  getRawReservations(): Promise<Reservation[]>;
+  getReservations(): Promise<Reservation[]>;
+  getReservationsForEvent(eventId: string): Promise<Reservation[]>;
+  createReservation(
+    eventId: string,
+    lines: Array<{
+      equipmentId: number;
+      quantity: number;
+    }>,
+  ): Promise<CreateReservationResult>;
+  deleteReservationLine(lineId: string): Promise<void>;
 }
 
 export interface AuthService {

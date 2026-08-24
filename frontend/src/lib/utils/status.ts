@@ -1,4 +1,4 @@
-import type { EmployeeStatus, EquipmentStatus } from "$lib/types/domain";
+import type { EquipmentStatus } from "$lib/types/domain";
 
 /**
  * Maps domain statuses to badge color variants. Labels are handled by the
@@ -14,8 +14,4 @@ export function equipmentStatusVariant(status: EquipmentStatus): BadgeVariant {
     case "DECATALOGUED":
       return "gray";
   }
-}
-
-export function employeeStatusVariant(status: EmployeeStatus): BadgeVariant {
-  return status === "active" ? "green" : "gray";
 }

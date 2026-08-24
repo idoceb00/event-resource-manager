@@ -1,51 +1,66 @@
-import { employees, events, products, reservations } from "$lib/data/mock-data";
-import type { Reservation, ReservationWithNames } from "$lib/types/domain";
+import { events, products } from "$lib/data/mock-data";
+import type {
+  Reservation,
+  ReservationLine,
+  User,
+} from "$lib/types/domain";
 import type { ReservationService } from "../types";
 
-function getEventName(eventId: string): string {
-  return events.find((event) => event.id === eventId)?.name ?? "";
-}
+const mockUser: User = {
+  id: "user-001",
+  username: "admin",
+  name: "Admin",
+  role: "admin",
+  active: true,
+};
 
-function getProductName(productId: string | undefined): string {
-  if (!productId) return "—";
-  return products.find((product) => product.id === productId)?.name ?? "";
-}
-
-function getEmployeeName(employeeId: string | undefined): string {
-  if (!employeeId) return "—";
-  return employees.find((employee) => employee.id === employeeId)?.name ?? "";
-}
-
-function withNames(reservation: Reservation): ReservationWithNames {
+function makeLine(
+  id: string,
+  equipmentId: string,
+  quantity: number,
+): ReservationLine {
   return {
-    ...reservation,
-    eventName: getEventName(reservation.eventId),
-    productName: getProductName(reservation.productId),
-    employeeName: getEmployeeName(reservation.employeeId),
+    id,
+    equipment: products.find((p) => p.id === equipmentId)!,
+    author: mockUser,
+    quantity,
   };
 }
 
+const mockReservations: Reservation[] = [
+  {
+    id: "res-001",
+    event: events[0],
+    lines: [
+      makeLine("line-001", "prod-001", 3),
+      makeLine("line-002", "prod-003", 4),
+    ],
+  },
+  {
+    id: "res-002",
+    event: events[1],
+    lines: [makeLine("line-003", "prod-006", 2)],
+  },
+];
+
 export const mockReservationService: ReservationService = {
-  async getReservations(): Promise<ReservationWithNames[]> {
-    return reservations.map(withNames);
+  async getReservations(): Promise<Reservation[]> {
+    return mockReservations;
   },
 
-  async getReservationsForEvent(
+  async getReservationsForEvent(eventId: string): Promise<Reservation[]> {
+    return mockReservations.filter((r) => r.event.id === eventId);
+  },
+
+  async createReservation(
     eventId: string,
-  ): Promise<ReservationWithNames[]> {
-    return reservations
-      .filter((reservation) => reservation.eventId === eventId)
-      .map(withNames);
+    lines: Array<{
+      equipmentId: number;
+      quantity: number;
+    }>,
+  ) {
+    return { succeeded: lines.length, failed: 0, errors: [] };
   },
 
-  async hasConflict(reservationId: string): Promise<boolean> {
-    return (
-      reservations.find((reservation) => reservation.id === reservationId)
-        ?.hasConflict ?? false
-    );
-  },
-
-  async getRawReservations(): Promise<Reservation[]> {
-    return reservations;
-  },
+  async deleteReservationLine(): Promise<void> {},
 };

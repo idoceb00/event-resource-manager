@@ -10,8 +10,6 @@ export type EquipmentCategory = "SOUND" | "LIGHTING" | "MOTORS_AND_STRUCTURES" |
 
 export type EquipmentStatus = "CATALOGUED" | "DECATALOGUED";
 
-export type EmployeeStatus = "active" | "inactive";
-
 export interface Performance {
   id: string;
   name: string;
@@ -39,35 +37,25 @@ export interface Equipment {
   stock: number;
 }
 
-export interface Employee {
+export interface ReservationLine {
   id: string;
-  name: string;
-  role: string;
-  status: EmployeeStatus;
-  email: string;
-  phone: string;
+  equipment: Equipment;
+  author: User;
+  quantity: number;
 }
 
 export interface Reservation {
   id: string;
-  eventId: string;
-  productId?: string;
-  employeeId?: string;
-  startDate: string;
-  endDate: string;
-  hasConflict?: boolean;
-}
-
-export interface ReservationWithNames extends Reservation {
-  eventName: string;
-  productName: string;
-  employeeName: string;
+  event: Event;
+  lines: ReservationLine[];
 }
 
 export type UserRole = "admin" | "employee";
 
 export interface User {
   id: string;
+  username: string;
   name: string;
   role: UserRole;
+  active: boolean;
 }

@@ -42,7 +42,16 @@ async function request<T>(
     if (response.status === 401 && onUnauthorized) {
       onUnauthorized();
     }
-    throw new ApiError(response.status, `Request failed: ${response.status}`);
+    let message = `Request failed: ${response.status}`;
+    try {
+      const body = await response.json();
+      if (body.detail) {
+        message = body.detail;
+      }
+    } catch {
+      // ignore parse error
+    }
+    throw new ApiError(response.status, message);
   }
 
   if (response.status === 204) {

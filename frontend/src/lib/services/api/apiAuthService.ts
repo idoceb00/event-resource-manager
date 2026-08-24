@@ -5,14 +5,17 @@ import type { AuthService } from "../types";
 interface BackendAuthResponse {
   id: number;
   username: string;
+  name: string;
   role: "ADMINISTRATOR" | "EMPLOYEE";
 }
 
 function mapUser(response: BackendAuthResponse): User {
   return {
     id: String(response.id),
-    name: response.username,
+    username: response.username,
+    name: response.name ?? response.username,
     role: response.role === "ADMINISTRATOR" ? "admin" : "employee",
+    active: true,
   };
 }
 
