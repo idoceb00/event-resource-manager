@@ -5,7 +5,6 @@ import type { PageLoad } from "./$types";
 export interface EventRow {
   event: Event;
   reservationCount: number;
-  hasConflict: boolean;
 }
 
 export const load: PageLoad = async () => {
@@ -16,13 +15,11 @@ export const load: PageLoad = async () => {
       const reservations = await reservationService.getReservationsForEvent(
         event.id,
       );
-      return {
-        event,
-        reservationCount: reservations.length,
-        hasConflict: reservations.some(
-          (reservation) => reservation.hasConflict,
-        ),
-      };
+      const reservationCount = reservations.reduce(
+        (sum, r) => sum + r.lines.length,
+        0,
+      );
+      return { event, reservationCount };
     }),
   );
 

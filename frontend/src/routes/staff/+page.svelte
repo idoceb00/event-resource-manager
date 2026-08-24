@@ -2,8 +2,7 @@
   import DataTable from "$lib/components/ui/DataTable.svelte";
   import StatusBadge from "$lib/components/ui/StatusBadge.svelte";
   import { m } from "$lib/paraglide/messages";
-  import type { Employee } from "$lib/types/domain";
-  import { employeeStatusVariant } from "$lib/utils/status";
+  import type { User } from "$lib/types/domain";
   import type { PageData } from "./$types";
 
   let { data }: { data: PageData } = $props();
@@ -13,7 +12,7 @@
   <h1 class="text-2xl mb-6">{m.staff()}</h1>
 
   <DataTable
-    rows={data.staff}
+    rows={data.users}
     variant="gray"
     columns={[
       {
@@ -28,50 +27,26 @@
         cell: roleCell,
       },
       { header: m.staff_status(), cell: statusCell },
-      {
-        header: m.staff_email(),
-        className: "text-sm text-gray-600",
-        cell: emailCell,
-      },
-      {
-        header: m.staff_phone(),
-        className: "text-sm text-gray-600",
-        cell: phoneCell,
-      },
     ]}
   />
 </div>
 
-{#snippet idCell(row: Employee)}
+{#snippet idCell(row: User)}
   {row.id}
 {/snippet}
 
-{#snippet nameCell(row: Employee)}
+{#snippet nameCell(row: User)}
   {row.name}
 {/snippet}
 
-{#snippet roleCell(row: Employee)}
+{#snippet roleCell(row: User)}
   {row.role}
 {/snippet}
 
-{#snippet statusCell(row: Employee)}
-  {#if row.status === "active"}
-    <StatusBadge
-      label={m.status_active()}
-      variant={employeeStatusVariant(row.status)}
-    />
+{#snippet statusCell(row: User)}
+  {#if row.active}
+    <StatusBadge label={m.status_active()} variant="green" />
   {:else}
-    <StatusBadge
-      label={m.status_inactive()}
-      variant={employeeStatusVariant(row.status)}
-    />
+    <StatusBadge label={m.status_inactive()} variant="gray" />
   {/if}
-{/snippet}
-
-{#snippet emailCell(row: Employee)}
-  {row.email}
-{/snippet}
-
-{#snippet phoneCell(row: Employee)}
-  {row.phone}
 {/snippet}

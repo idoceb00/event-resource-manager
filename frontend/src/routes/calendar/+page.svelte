@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { AlertTriangle, ChevronLeft, ChevronRight } from "@lucide/svelte";
+  import { ChevronLeft, ChevronRight } from "@lucide/svelte";
   import { resolve } from "$app/paths";
   import Button from "$lib/components/ui/Button.svelte";
   import { m } from "$lib/paraglide/messages";
@@ -90,22 +90,14 @@
               </div>
               <div class="space-y-1">
                 {#each dayEvents as event (event.id)}
-                  {@const conflict = data.conflicts[event.id] === true}
                   <a
                     href={resolve(
                       localizeHref(`/events/${event.id}`) as "/events/[id]",
                       { id: event.id },
                     )}
-                    class="block px-2 py-1 rounded text-xs transition-colors {conflict
-                      ? 'bg-amber-100 text-amber-900 hover:bg-amber-200'
-                      : 'bg-neutral-900 text-white hover:bg-neutral-800'}"
+                    class="block px-2 py-1 rounded text-xs bg-neutral-900 text-white hover:bg-neutral-800 transition-colors"
                   >
-                    <div class="flex items-center gap-1">
-                      {#if conflict}
-                        <AlertTriangle class="w-3 h-3 flex-shrink-0" />
-                      {/if}
-                      <span class="truncate">{event.name}</span>
-                    </div>
+                    <span class="truncate">{event.name}</span>
                   </a>
                 {/each}
               </div>
@@ -113,17 +105,6 @@
           {/each}
         </div>
       {/each}
-    </div>
-  </div>
-
-  <div class="mt-4 flex items-center gap-6 text-sm">
-    <div class="flex items-center gap-2">
-      <div class="w-4 h-4 rounded bg-neutral-900"></div>
-      <span class="text-neutral-600">{m.calendar_legend_normal()}</span>
-    </div>
-    <div class="flex items-center gap-2">
-      <div class="w-4 h-4 rounded bg-amber-100 border border-amber-300"></div>
-      <span class="text-neutral-600">{m.calendar_legend_conflict()}</span>
     </div>
   </div>
 </div>
