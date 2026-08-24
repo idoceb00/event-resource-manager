@@ -10,8 +10,11 @@ import com.idoceb00.eventory.backend.domain.model.Equipment;
 import com.idoceb00.eventory.backend.domain.model.EquipmentCategory;
 import com.idoceb00.eventory.backend.domain.model.EquipmentStatus;
 import com.idoceb00.eventory.backend.domain.model.Event;
+import com.idoceb00.eventory.backend.domain.model.User;
+import com.idoceb00.eventory.backend.domain.model.UserRole;
 import com.idoceb00.eventory.backend.infrastructure.persistence.EquipmentRepository;
 import com.idoceb00.eventory.backend.infrastructure.persistence.EventRepository;
+import com.idoceb00.eventory.backend.infrastructure.persistence.UserRepository;
 import com.idoceb00.eventory.backend.infrastructure.web.dto.CreateReservationRequest;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +23,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import tools.jackson.databind.ObjectMapper;
@@ -32,10 +38,12 @@ class ReservationControllerTest {
   @Autowired private MockMvc mockMvc;
   @Autowired private EventRepository eventRepository;
   @Autowired private EquipmentRepository equipmentRepository;
+  @Autowired private UserRepository userRepository;
   @Autowired private ObjectMapper objectMapper;
 
   private Event event;
   private Equipment speakers;
+  private User user;
 
   @BeforeEach
   void setUp() {
@@ -48,6 +56,12 @@ class ReservationControllerTest {
     speakers =
         equipmentRepository.save(
             new Equipment("Speakers", EquipmentCategory.SOUND, EquipmentStatus.CATALOGUED, 5));
+    user = userRepository.save(new User("carlos", "Carlos Ramirez", "hash123", UserRole.EMPLOYEE));
+
+    SecurityContextHolder.getContext()
+        .setAuthentication(
+            new UsernamePasswordAuthenticationToken(
+                "carlos", null, java.util.List.of(new SimpleGrantedAuthority("ROLE_EMPLOYEE"))));
   }
 
   @Test
@@ -65,6 +79,7 @@ class ReservationControllerTest {
         .andExpect(jsonPath("$.lines").isArray())
         .andExpect(jsonPath("$.lines", hasSize(1)))
         .andExpect(jsonPath("$.lines[0].equipment.name").value("Speakers"))
+        .andExpect(jsonPath("$.lines[0].author.username").value("carlos"))
         .andExpect(jsonPath("$.lines[0].quantity").value(3));
   }
 

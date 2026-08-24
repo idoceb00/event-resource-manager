@@ -8,16 +8,24 @@ import com.idoceb00.eventory.backend.domain.model.EquipmentCategory;
 import com.idoceb00.eventory.backend.domain.model.EquipmentStatus;
 import com.idoceb00.eventory.backend.domain.model.Event;
 import com.idoceb00.eventory.backend.domain.model.Reservation;
+import com.idoceb00.eventory.backend.domain.model.ReservationLine;
+import com.idoceb00.eventory.backend.domain.model.User;
+import com.idoceb00.eventory.backend.domain.model.UserRole;
+import com.idoceb00.eventory.backend.domain.service.DuplicateReservationException;
 import com.idoceb00.eventory.backend.domain.service.EntityNotFoundException;
 import com.idoceb00.eventory.backend.domain.service.InsufficientStockException;
 import com.idoceb00.eventory.backend.infrastructure.persistence.EquipmentRepository;
 import com.idoceb00.eventory.backend.infrastructure.persistence.EventRepository;
 import com.idoceb00.eventory.backend.infrastructure.persistence.ReservationRepository;
+import com.idoceb00.eventory.backend.infrastructure.persistence.UserRepository;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -27,11 +35,14 @@ class ReservationServiceTest {
   @Autowired private ReservationService reservationService;
   @Autowired private EventRepository eventRepository;
   @Autowired private EquipmentRepository equipmentRepository;
+  @Autowired private UserRepository userRepository;
   @Autowired private ReservationRepository reservationRepository;
 
   private Event eventA;
   private Event eventB;
   private Equipment speakers;
+  private User user1;
+  private User user2;
 
   @BeforeEach
   void setUp() {
@@ -52,6 +63,14 @@ class ReservationServiceTest {
     speakers =
         equipmentRepository.save(
             new Equipment("Speakers", EquipmentCategory.SOUND, EquipmentStatus.CATALOGUED, 5));
+
+    user1 = userRepository.save(new User("carlos", "Carlos Ramirez", "hash123", UserRole.EMPLOYEE));
+    user2 = userRepository.save(new User("laura", "Laura Vega", "hash456", UserRole.EMPLOYEE));
+
+    SecurityContextHolder.getContext()
+        .setAuthentication(
+            new UsernamePasswordAuthenticationToken(
+                "carlos", null, java.util.List.of(new SimpleGrantedAuthority("ROLE_EMPLOYEE"))));
   }
 
   @Test
@@ -62,8 +81,10 @@ class ReservationServiceTest {
     assertThat(reservation).isNotNull();
     assertThat(reservation.getEvent()).isEqualTo(eventA);
     assertThat(reservation.getLines()).hasSize(1);
-    assertThat(reservation.getLines().get(0).getEquipment()).isEqualTo(speakers);
-    assertThat(reservation.getLines().get(0).getQuantity()).isEqualTo(3);
+    ReservationLine line = reservation.getLines().stream().findFirst().orElseThrow();
+    assertThat(line.getEquipment()).isEqualTo(speakers);
+    assertThat(line.getUser()).isEqualTo(user1);
+    assertThat(line.getQuantity()).isEqualTo(3);
   }
 
   @Test
@@ -86,7 +107,8 @@ class ReservationServiceTest {
     assertThat(reservation).isNotNull();
     assertThat(reservation.getEvent()).isEqualTo(eventB);
     assertThat(reservation.getLines()).hasSize(1);
-    assertThat(reservation.getLines().get(0).getQuantity()).isEqualTo(5);
+    assertThat(reservation.getLines().stream().findFirst().orElseThrow().getQuantity())
+        .isEqualTo(5);
   }
 
   @Test
@@ -104,12 +126,28 @@ class ReservationServiceTest {
   }
 
   @Test
+  void reserveEquipment_duplicateReservation_throwsDuplicate() {
+    reservationService.reserveEquipment(eventA.getId(), speakers.getId(), 2);
+
+    assertThatThrownBy(
+            () -> reservationService.reserveEquipment(eventA.getId(), speakers.getId(), 1))
+        .isInstanceOf(DuplicateReservationException.class)
+        .hasMessageContaining("already has a reservation");
+  }
+
+  @Test
   void reserveEquipment_addsLineToExistingReservation() {
     reservationService.reserveEquipment(eventA.getId(), speakers.getId(), 2);
+
+    SecurityContextHolder.getContext()
+        .setAuthentication(
+            new UsernamePasswordAuthenticationToken(
+                "laura", null, java.util.List.of(new SimpleGrantedAuthority("ROLE_EMPLOYEE"))));
+
     Reservation updated = reservationService.reserveEquipment(eventA.getId(), speakers.getId(), 1);
 
     assertThat(updated.getLines()).hasSize(2);
-    int totalQuantity = updated.getLines().stream().mapToInt(l -> l.getQuantity()).sum();
+    int totalQuantity = updated.getLines().stream().mapToInt(ReservationLine::getQuantity).sum();
     assertThat(totalQuantity).isEqualTo(3);
   }
 }

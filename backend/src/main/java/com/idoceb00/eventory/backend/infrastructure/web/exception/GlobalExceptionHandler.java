@@ -2,8 +2,11 @@ package com.idoceb00.eventory.backend.infrastructure.web.exception;
 
 import com.idoceb00.eventory.backend.domain.service.DuplicateEquipmentException;
 import com.idoceb00.eventory.backend.domain.service.DuplicatePerformanceException;
+import com.idoceb00.eventory.backend.domain.service.DuplicateReservationException;
 import com.idoceb00.eventory.backend.domain.service.EntityNotFoundException;
+import com.idoceb00.eventory.backend.domain.service.EquipmentStateException;
 import com.idoceb00.eventory.backend.domain.service.InsufficientStockException;
+import com.idoceb00.eventory.backend.domain.service.InvalidStockAdjustmentException;
 import java.net.URI;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -34,6 +37,23 @@ public class GlobalExceptionHandler {
     return problem;
   }
 
+  @ExceptionHandler(InvalidStockAdjustmentException.class)
+  public ProblemDetail handleBadStockAdjustment(InvalidStockAdjustmentException ex) {
+    ProblemDetail problem =
+        ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+    problem.setTitle("Bad Request");
+    problem.setType(URI.create("about:blank"));
+    return problem;
+  }
+
+  @ExceptionHandler(EquipmentStateException.class)
+  public ProblemDetail handleEquipmentState(EquipmentStateException ex) {
+    ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+    problem.setTitle("Conflict");
+    problem.setType(URI.create("about:blank"));
+    return problem;
+  }
+
   @ExceptionHandler(DuplicateEquipmentException.class)
   public ProblemDetail handleDuplicateEquipment(DuplicateEquipmentException ex) {
     ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
@@ -46,6 +66,23 @@ public class GlobalExceptionHandler {
   public ProblemDetail handleDuplicatePerformance(DuplicatePerformanceException ex) {
     ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
     problem.setTitle("Conflict");
+    problem.setType(URI.create("about:blank"));
+    return problem;
+  }
+
+  @ExceptionHandler(DuplicateReservationException.class)
+  public ProblemDetail handleDuplicateReservation(DuplicateReservationException ex) {
+    ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+    problem.setTitle("Conflict");
+    problem.setType(URI.create("about:blank"));
+    return problem;
+  }
+
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ProblemDetail handleIllegalArgument(IllegalArgumentException ex) {
+    ProblemDetail problem =
+        ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+    problem.setTitle("Bad Request");
     problem.setType(URI.create("about:blank"));
     return problem;
   }

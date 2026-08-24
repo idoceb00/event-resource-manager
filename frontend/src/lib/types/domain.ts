@@ -6,16 +6,17 @@
  * of an HTTP response.
  */
 
-export type EquipmentStatus = "available" | "reserved" | "inactive";
+export type EquipmentCategory =
+  "SOUND" | "LIGHTING" | "MOTORS_AND_STRUCTURES" | "VIDEO";
 
-export type EmployeeStatus = "active" | "inactive";
+export type EquipmentStatus = "CATALOGUED" | "DECATALOGUED";
 
 export interface Performance {
   id: string;
-  eventId: string;
   name: string;
-  date: string;
-  time: string;
+  startTime: string;
+  duration: number;
+  rehearsalTime: string;
 }
 
 export interface Event {
@@ -23,48 +24,39 @@ export interface Event {
   name: string;
   startDate: string;
   endDate: string;
-  location: string;
-  transportInfo?: string;
+  address: string;
+  transport: boolean;
+  extraInfo?: string;
   performances: Performance[];
 }
 
 export interface Equipment {
   id: string;
   name: string;
-  category: string;
+  category: EquipmentCategory;
   status: EquipmentStatus;
-  serialNumber?: string;
+  stock: number;
 }
 
-export interface Employee {
+export interface ReservationLine {
   id: string;
-  name: string;
-  role: string;
-  status: EmployeeStatus;
-  email: string;
-  phone: string;
+  equipment: Equipment;
+  author: User;
+  quantity: number;
 }
 
 export interface Reservation {
   id: string;
-  eventId: string;
-  productId?: string;
-  employeeId?: string;
-  startDate: string;
-  endDate: string;
-  hasConflict?: boolean;
-}
-
-export interface ReservationWithNames extends Reservation {
-  eventName: string;
-  productName: string;
-  employeeName: string;
+  event: Event;
+  lines: ReservationLine[];
 }
 
 export type UserRole = "admin" | "employee";
 
 export interface User {
   id: string;
+  username: string;
   name: string;
-  role?: UserRole;
+  role: UserRole;
+  active: boolean;
 }

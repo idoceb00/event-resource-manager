@@ -1,12 +1,14 @@
-import { mockEquipmentService } from "./mock/mockEquipmentService";
-import { mockEventService } from "./mock/mockEventService";
-import { mockReservationService } from "./mock/mockReservationService";
-import { mockStaffService } from "./mock/mockStaffService";
+import { apiAuthService } from "./api/apiAuthService";
+import { apiEquipmentService } from "./api/apiEquipmentService";
+import { apiEventService } from "./api/apiEventService";
+import { apiReservationService } from "./api/apiReservationService";
+import { apiUserService } from "./api/apiUserService";
 import type {
+  AuthService,
   EquipmentService,
   EventService,
   ReservationService,
-  StaffService,
+  UserService,
 } from "./types";
 
 /**
@@ -16,7 +18,8 @@ import type {
  * replace the mock bindings below with the corresponding `api*Service`
  * implementations — no component code changes.
  */
-export const eventService: EventService = mockEventService;
-export const equipmentService: EquipmentService = mockEquipmentService;
-export const staffService: StaffService = mockStaffService;
-export const reservationService: ReservationService = mockReservationService;
+export const eventService: EventService = apiEventService;
+export const equipmentService: EquipmentService = apiEquipmentService;
+export const userService: UserService = apiUserService;
+export const reservationService: ReservationService = apiReservationService;
+export const authService: AuthService = apiAuthService;

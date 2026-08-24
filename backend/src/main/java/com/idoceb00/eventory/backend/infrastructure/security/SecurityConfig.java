@@ -69,6 +69,18 @@ public class SecurityConfig {
                     .requestMatchers(
                         org.springframework.http.HttpMethod.PATCH, "/api/equipment/*/stock")
                     .hasRole("ADMINISTRATOR")
+                    .requestMatchers(
+                        org.springframework.http.HttpMethod.POST, "/api/equipment/*/decatalogue")
+                    .hasRole("ADMINISTRATOR")
+                    .requestMatchers(
+                        org.springframework.http.HttpMethod.POST, "/api/equipment/*/recatalogue")
+                    .hasRole("ADMINISTRATOR")
+                    .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/users")
+                    .hasRole("ADMINISTRATOR")
+                    .requestMatchers(org.springframework.http.HttpMethod.PUT, "/api/users/**")
+                    .hasRole("ADMINISTRATOR")
+                    .requestMatchers(org.springframework.http.HttpMethod.PATCH, "/api/users/**")
+                    .hasRole("ADMINISTRATOR")
                     .anyRequest()
                     .authenticated())
         .securityContext(ctx -> ctx.securityContextRepository(securityContextRepository));

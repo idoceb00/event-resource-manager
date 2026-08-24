@@ -11,6 +11,10 @@
   import { m } from "$lib/paraglide/messages";
   import NavItem from "./NavItem.svelte";
 
+  import { session } from "$lib/stores/currentUser.svelte";
+
+  const isAdmin = $derived(session.user?.role === "admin");
+
   const isActive = (routeId: string): boolean => {
     const current = page.route.id;
     if (routeId === "/") return current === "/";
@@ -48,12 +52,14 @@
       icon={Package}
       active={isActive("/inventory")}
     />
-    <NavItem
-      href="/staff"
-      label={m.staff()}
-      icon={Users}
-      active={isActive("/staff")}
-    />
+    {#if isAdmin}
+      <NavItem
+        href="/staff"
+        label={m.staff()}
+        icon={Users}
+        active={isActive("/staff")}
+      />
+    {/if}
     <NavItem
       href="/reservations"
       label={m.reservations()}

@@ -9,8 +9,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,7 +31,7 @@ public class Reservation {
   private Event event;
 
   @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<ReservationLine> lines = new ArrayList<>();
+  private Set<ReservationLine> lines = new LinkedHashSet<>();
 
   public Reservation(Event event) {
     this.event = event;

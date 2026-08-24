@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { AlertTriangle, Calendar, Package, Users } from "@lucide/svelte";
+  import { Calendar, Package, ClipboardList } from "@lucide/svelte";
   import { resolve } from "$app/paths";
   import StatCard from "$lib/components/dashboard/StatCard.svelte";
   import Card from "$lib/components/ui/Card.svelte";
@@ -15,16 +15,11 @@
 <div class="p-6 max-w-7xl">
   <h1 class="mb-6">{m.dashboard()}</h1>
 
-  <div class="grid grid-cols-4 gap-4 mb-8">
+  <div class="grid grid-cols-3 gap-4 mb-8">
     <StatCard
       label={m.stats_active_products()}
       value={data.stats.activeProducts}
       icon={Package}
-    />
-    <StatCard
-      label={m.stats_active_staff()}
-      value={data.stats.activeStaff}
-      icon={Users}
     />
     <StatCard
       label={m.stats_upcoming_events()}
@@ -32,10 +27,9 @@
       icon={Calendar}
     />
     <StatCard
-      label={m.stats_conflicts()}
-      value={data.stats.conflicts}
-      icon={AlertTriangle}
-      variant="warning"
+      label={m.stats_reservation_lines()}
+      value={data.stats.reservationLines}
+      icon={ClipboardList}
     />
   </div>
 
@@ -52,7 +46,7 @@
             <div>
               <div class="font-medium text-neutral-900">{event.name}</div>
               <div class="text-sm text-neutral-600 mt-0.5">
-                {event.location}
+                {event.address}
               </div>
             </div>
             <div class="text-sm text-neutral-600">

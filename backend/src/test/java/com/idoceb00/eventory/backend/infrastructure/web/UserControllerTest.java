@@ -26,8 +26,8 @@ class UserControllerTest {
 
   @BeforeEach
   void setUp() {
-    userRepository.save(new User("admin", "hash123", UserRole.ADMINISTRATOR));
-    userRepository.save(new User("employee1", "hash456", UserRole.EMPLOYEE));
+    userRepository.save(new User("admin", "Admin User", "hash123", UserRole.ADMINISTRATOR));
+    userRepository.save(new User("employee1", "Employee One", "hash456", UserRole.EMPLOYEE));
   }
 
   @Test
@@ -38,6 +38,7 @@ class UserControllerTest {
         .andExpect(jsonPath("$").isArray())
         .andExpect(jsonPath("$", hasSize(2)))
         .andExpect(jsonPath("$[0].username").value("admin"))
+        .andExpect(jsonPath("$[0].name").value("Admin User"))
         .andExpect(jsonPath("$[0].role").value("ADMINISTRATOR"))
         .andExpect(jsonPath("$[0].active").value(true))
         .andExpect(jsonPath("$[0].passwordHash").doesNotExist());
