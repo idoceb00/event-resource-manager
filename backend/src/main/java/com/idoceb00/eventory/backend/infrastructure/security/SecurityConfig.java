@@ -79,7 +79,7 @@ public class SecurityConfig {
                     .hasRole("ADMINISTRATOR")
                     .requestMatchers(org.springframework.http.HttpMethod.PUT, "/api/users/**")
                     .hasRole("ADMINISTRATOR")
-                    .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/api/users/**")
+                    .requestMatchers(org.springframework.http.HttpMethod.PATCH, "/api/users/**")
                     .hasRole("ADMINISTRATOR")
                     .anyRequest()
                     .authenticated())
