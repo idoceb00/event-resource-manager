@@ -5,10 +5,7 @@
   import { equipmentService } from "$lib/services";
   import { session } from "$lib/stores/currentUser.svelte";
   import { toast } from "$lib/stores/toast.svelte";
-  import type {
-    Equipment,
-    EquipmentCategory,
-  } from "$lib/types/domain";
+  import type { Equipment, EquipmentCategory } from "$lib/types/domain";
   import { categoryLabels } from "$lib/utils/equipment";
   import type { PageData } from "./$types";
 
@@ -23,11 +20,17 @@
   let filterCategory = $state<EquipmentCategory | "all">("all");
   let showDecatalogued = $state(false);
 
-  const categoryFilterOptions: { value: EquipmentCategory | "all"; label: string }[] = [
+  const categoryFilterOptions: {
+    value: EquipmentCategory | "all";
+    label: string;
+  }[] = [
     { value: "all", label: m.inventory_all() },
     { value: "SOUND", label: m.category_sound() },
     { value: "LIGHTING", label: m.category_lighting() },
-    { value: "MOTORS_AND_STRUCTURES", label: m.category_motors_and_structures() },
+    {
+      value: "MOTORS_AND_STRUCTURES",
+      label: m.category_motors_and_structures(),
+    },
     { value: "VIDEO", label: m.category_video() },
   ];
 
@@ -49,13 +52,12 @@
   let createLoading = $state(false);
   let smartCreateMatch = $state<Equipment | null>(null);
 
-  const categoryOptions: { value: EquipmentCategory; label: () => string }[] =
-    [
-      { value: "SOUND", label: m.category_sound },
-      { value: "LIGHTING", label: m.category_lighting },
-      { value: "MOTORS_AND_STRUCTURES", label: m.category_motors_and_structures },
-      { value: "VIDEO", label: m.category_video },
-    ];
+  const categoryOptions: { value: EquipmentCategory; label: () => string }[] = [
+    { value: "SOUND", label: m.category_sound },
+    { value: "LIGHTING", label: m.category_lighting },
+    { value: "MOTORS_AND_STRUCTURES", label: m.category_motors_and_structures },
+    { value: "VIDEO", label: m.category_video },
+  ];
 
   function checkSmartCreate() {
     if (!createName.trim()) {
@@ -73,7 +75,9 @@
     createLoading = true;
     try {
       const updated = await equipmentService.recatalogue(smartCreateMatch.id);
-      allEquipment = allEquipment.map((eq) => (eq.id === updated.id ? updated : eq));
+      allEquipment = allEquipment.map((eq) =>
+        eq.id === updated.id ? updated : eq,
+      );
       equipment = [...equipment, updated];
       smartCreateMatch = null;
       showCreateForm = false;
@@ -202,12 +206,21 @@
     try {
       const updated = await equipmentService.recatalogue(recatalogueId);
       equipment = [...equipment, updated];
-      allEquipment = allEquipment.map((eq) => (eq.id === recatalogueId ? updated : eq));
+      allEquipment = allEquipment.map((eq) =>
+        eq.id === recatalogueId ? updated : eq,
+      );
 
       if (recatalogueStock > 0) {
-        const restocked = await equipmentService.adjustStock(recatalogueId, recatalogueStock);
-        equipment = equipment.map((eq) => (eq.id === recatalogueId ? restocked : eq));
-        allEquipment = allEquipment.map((eq) => (eq.id === recatalogueId ? restocked : eq));
+        const restocked = await equipmentService.adjustStock(
+          recatalogueId,
+          recatalogueStock,
+        );
+        equipment = equipment.map((eq) =>
+          eq.id === recatalogueId ? restocked : eq,
+        );
+        allEquipment = allEquipment.map((eq) =>
+          eq.id === recatalogueId ? restocked : eq,
+        );
       }
 
       recatalogueId = null;
@@ -251,12 +264,17 @@
               {m.inventory_smart_create_decatalogued()}
             </p>
             <div class="flex gap-2">
-              <Button onclick={handleSmartCreateRecatalogue} disabled={createLoading}>
+              <Button
+                onclick={handleSmartCreateRecatalogue}
+                disabled={createLoading}
+              >
                 {m.inventory_smart_create_recatalogue()}
               </Button>
               <Button
                 variant="icon"
-                onclick={() => { smartCreateMatch = null; }}
+                onclick={() => {
+                  smartCreateMatch = null;
+                }}
               >
                 &times;
               </Button>
@@ -266,7 +284,10 @@
 
         <form onsubmit={handleCreate} class="flex items-end gap-3">
           <div class="flex-1">
-            <label for="create-name" class="block text-sm text-neutral-700 mb-1">
+            <label
+              for="create-name"
+              class="block text-sm text-neutral-700 mb-1"
+            >
               {m.inventory_name()}
             </label>
             <input
@@ -279,7 +300,10 @@
             />
           </div>
           <div>
-            <label for="create-category" class="block text-sm text-neutral-700 mb-1">
+            <label
+              for="create-category"
+              class="block text-sm text-neutral-700 mb-1"
+            >
               {m.inventory_category()}
             </label>
             <select
@@ -293,7 +317,10 @@
             </select>
           </div>
           <div>
-            <label for="create-stock" class="block text-sm text-neutral-700 mb-1">
+            <label
+              for="create-stock"
+              class="block text-sm text-neutral-700 mb-1"
+            >
               {m.inventory_stock()}
             </label>
             <input
@@ -315,7 +342,10 @@
     <div class="flex items-center gap-4">
       <label class="flex items-center gap-2">
         <span class="text-sm">{m.inventory_category()}</span>
-        <select bind:value={filterCategory} class="border rounded px-3 py-1 text-sm">
+        <select
+          bind:value={filterCategory}
+          class="border rounded px-3 py-1 text-sm"
+        >
           {#each categoryFilterOptions as option (option.value)}
             <option value={option.value}>{option.label}</option>
           {/each}
@@ -344,9 +374,7 @@
       { header: m.inventory_name(), cell: nameCell },
       { header: m.inventory_category(), cell: categoryCell },
       { header: m.inventory_stock(), cell: stockCell },
-      ...(isAdmin
-        ? [{ header: "", cell: actionsCell }]
-        : []),
+      ...(isAdmin ? [{ header: "", cell: actionsCell }] : []),
     ]}
   />
 </div>
@@ -368,14 +396,22 @@
     {#if adjustId === row.id}
       <div class="flex items-center gap-1">
         <button
-          onclick={() => { adjustSign = 1; }}
-          class="px-2 py-1 text-sm rounded {adjustSign === 1 ? 'bg-green-100 text-green-800 font-medium' : 'bg-neutral-100 text-neutral-600'}"
+          onclick={() => {
+            adjustSign = 1;
+          }}
+          class="px-2 py-1 text-sm rounded {adjustSign === 1
+            ? 'bg-green-100 text-green-800 font-medium'
+            : 'bg-neutral-100 text-neutral-600'}"
         >
           {m.inventory_adjust_stock_add()}
         </button>
         <button
-          onclick={() => { adjustSign = -1; }}
-          class="px-2 py-1 text-sm rounded {adjustSign === -1 ? 'bg-red-100 text-red-800 font-medium' : 'bg-neutral-100 text-neutral-600'}"
+          onclick={() => {
+            adjustSign = -1;
+          }}
+          class="px-2 py-1 text-sm rounded {adjustSign === -1
+            ? 'bg-red-100 text-red-800 font-medium'
+            : 'bg-neutral-100 text-neutral-600'}"
         >
           {m.inventory_adjust_stock_remove()}
         </button>
@@ -394,14 +430,20 @@
         </Button>
         <Button
           variant="icon"
-          onclick={() => { adjustId = null; adjustQty = 1; adjustSign = 1; }}
+          onclick={() => {
+            adjustId = null;
+            adjustQty = 1;
+            adjustSign = 1;
+          }}
         >
           &times;
         </Button>
       </div>
     {:else if decatalogueId === row.id}
       <div class="flex items-center gap-2">
-        <span class="text-xs text-neutral-600">{m.inventory_decatalogue_confirm()}</span>
+        <span class="text-xs text-neutral-600"
+          >{m.inventory_decatalogue_confirm()}</span
+        >
         <Button
           onclick={() => handleDecatalogue(row.id)}
           disabled={decatalogueLoading}
@@ -410,27 +452,38 @@
         </Button>
         <Button
           variant="icon"
-          onclick={() => { decatalogueId = null; }}
+          onclick={() => {
+            decatalogueId = null;
+          }}
         >
           &times;
         </Button>
       </div>
     {:else if row.status === "CATALOGUED"}
       <button
-        onclick={() => { adjustId = row.id; adjustQty = 1; adjustSign = 1; }}
+        onclick={() => {
+          adjustId = row.id;
+          adjustQty = 1;
+          adjustSign = 1;
+        }}
         class="text-sm text-neutral-500 hover:text-neutral-900 transition-colors"
       >
         {m.inventory_adjust_stock()}
       </button>
       <button
-        onclick={() => { decatalogueId = row.id; }}
+        onclick={() => {
+          decatalogueId = row.id;
+        }}
         class="text-sm text-neutral-500 hover:text-red-700 transition-colors"
       >
         {m.inventory_decatalogue()}
       </button>
     {:else}
       <button
-        onclick={() => { recatalogueId = row.id; recatalogueStock = 0; }}
+        onclick={() => {
+          recatalogueId = row.id;
+          recatalogueStock = 0;
+        }}
         disabled={recatalogueLoading}
         class="text-sm text-neutral-500 hover:text-green-700 transition-colors"
       >
@@ -449,7 +502,10 @@
       <p class="text-sm text-neutral-600 mb-4">
         {m.inventory_recatalogue_stock_prompt()}
       </p>
-      <label for="recatalogue-stock" class="block text-sm text-neutral-700 mb-1">
+      <label
+        for="recatalogue-stock"
+        class="block text-sm text-neutral-700 mb-1"
+      >
         {m.inventory_stock()}
       </label>
       <input
@@ -462,11 +518,17 @@
       <div class="flex gap-2 justify-end">
         <Button
           variant="icon"
-          onclick={() => { recatalogueId = null; recatalogueStock = 0; }}
+          onclick={() => {
+            recatalogueId = null;
+            recatalogueStock = 0;
+          }}
         >
           &times;
         </Button>
-        <Button onclick={handleRecatalogueConfirm} disabled={recatalogueLoading}>
+        <Button
+          onclick={handleRecatalogueConfirm}
+          disabled={recatalogueLoading}
+        >
           {m.inventory_smart_create_recatalogue()}
         </Button>
       </div>

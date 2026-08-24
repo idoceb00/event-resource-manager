@@ -42,7 +42,11 @@
         cell: productCell,
       },
       { header: m.reservations_staff(), className: "text-sm", cell: staffCell },
-      { header: m.reservations_quantity(), className: "text-sm", cell: quantityCell },
+      {
+        header: m.reservations_quantity(),
+        className: "text-sm",
+        cell: quantityCell,
+      },
     ]}
   />
 </div>

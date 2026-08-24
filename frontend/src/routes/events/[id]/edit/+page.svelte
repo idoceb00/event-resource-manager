@@ -45,7 +45,11 @@
         transport,
         extraInfo: extraInfo.trim() || undefined,
       });
-      goto(resolve(localizeHref(`/events/${data.event.id}`) as "/events/[id]", { id: data.event.id }));
+      goto(
+        resolve(localizeHref(`/events/${data.event.id}`) as "/events/[id]", {
+          id: data.event.id,
+        }),
+      );
     } catch (e) {
       if (e instanceof ApiError && e.status === 409) {
         error = m.event_form_date_conflict();
@@ -63,7 +67,10 @@
 <div class="p-6 max-w-2xl">
   <div class="mb-6">
     <a
-      href={resolve(localizeHref(`/events/${data.event.id}`) as "/events/[id]", { id: data.event.id })}
+      href={resolve(
+        localizeHref(`/events/${data.event.id}`) as "/events/[id]",
+        { id: data.event.id },
+      )}
       class="text-blue-600 hover:underline mb-2 inline-block"
     >
       ← {m.eventdetail_back()}
@@ -72,14 +79,24 @@
   </div>
 
   {#if error}
-    <div class="bg-red-50 border border-red-200 rounded p-4 mb-4 text-red-700 text-sm">
+    <div
+      class="bg-red-50 border border-red-200 rounded p-4 mb-4 text-red-700 text-sm"
+    >
       {error}
     </div>
   {/if}
 
-  <form onsubmit={(e) => { e.preventDefault(); handleSubmit(); }} class="space-y-4">
+  <form
+    onsubmit={(e) => {
+      e.preventDefault();
+      handleSubmit();
+    }}
+    class="space-y-4"
+  >
     <div>
-      <label for="name" class="block text-sm font-medium text-neutral-700 mb-1">{m.event_form_name()}</label>
+      <label for="name" class="block text-sm font-medium text-neutral-700 mb-1"
+        >{m.event_form_name()}</label
+      >
       <input
         id="name"
         type="text"
@@ -90,7 +107,11 @@
 
     <div class="grid grid-cols-2 gap-4">
       <div>
-        <label for="startDate" class="block text-sm font-medium text-neutral-700 mb-1">{m.event_form_start_date()}</label>
+        <label
+          for="startDate"
+          class="block text-sm font-medium text-neutral-700 mb-1"
+          >{m.event_form_start_date()}</label
+        >
         <input
           id="startDate"
           type="datetime-local"
@@ -99,7 +120,11 @@
         />
       </div>
       <div>
-        <label for="endDate" class="block text-sm font-medium text-neutral-700 mb-1">{m.event_form_end_date()}</label>
+        <label
+          for="endDate"
+          class="block text-sm font-medium text-neutral-700 mb-1"
+          >{m.event_form_end_date()}</label
+        >
         <input
           id="endDate"
           type="datetime-local"
@@ -110,7 +135,11 @@
     </div>
 
     <div>
-      <label for="address" class="block text-sm font-medium text-neutral-700 mb-1">{m.event_form_address()}</label>
+      <label
+        for="address"
+        class="block text-sm font-medium text-neutral-700 mb-1"
+        >{m.event_form_address()}</label
+      >
       <input
         id="address"
         type="text"
@@ -126,11 +155,17 @@
         bind:checked={transport}
         class="rounded border-neutral-300"
       />
-      <label for="transport" class="text-sm font-medium text-neutral-700">{m.event_form_transport()}</label>
+      <label for="transport" class="text-sm font-medium text-neutral-700"
+        >{m.event_form_transport()}</label
+      >
     </div>
 
     <div>
-      <label for="extraInfo" class="block text-sm font-medium text-neutral-700 mb-1">{m.event_form_extra_info()}</label>
+      <label
+        for="extraInfo"
+        class="block text-sm font-medium text-neutral-700 mb-1"
+        >{m.event_form_extra_info()}</label
+      >
       <textarea
         id="extraInfo"
         bind:value={extraInfo}
@@ -143,7 +178,13 @@
       <Button
         variant="secondary"
         type="button"
-        onclick={() => goto(resolve(localizeHref(`/events/${data.event.id}`) as "/events/[id]", { id: data.event.id }))}
+        onclick={() =>
+          goto(
+            resolve(
+              localizeHref(`/events/${data.event.id}`) as "/events/[id]",
+              { id: data.event.id },
+            ),
+          )}
       >
         Cancelar
       </Button>

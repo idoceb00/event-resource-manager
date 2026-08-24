@@ -187,11 +187,17 @@
           {m.user_create()}
         </h2>
         <form
-          onsubmit={(e) => { e.preventDefault(); handleCreate(); }}
+          onsubmit={(e) => {
+            e.preventDefault();
+            handleCreate();
+          }}
           class="flex items-end gap-3"
         >
           <div class="flex-1">
-            <label for="create-username" class="block text-sm text-neutral-700 mb-1">
+            <label
+              for="create-username"
+              class="block text-sm text-neutral-700 mb-1"
+            >
               {m.login_username()}
             </label>
             <input
@@ -203,7 +209,10 @@
             />
           </div>
           <div class="flex-1">
-            <label for="create-name" class="block text-sm text-neutral-700 mb-1">
+            <label
+              for="create-name"
+              class="block text-sm text-neutral-700 mb-1"
+            >
               {m.user_edit_name()}
             </label>
             <input
@@ -214,7 +223,10 @@
             />
           </div>
           <div class="flex-1">
-            <label for="create-password" class="block text-sm text-neutral-700 mb-1">
+            <label
+              for="create-password"
+              class="block text-sm text-neutral-700 mb-1"
+            >
               {m.user_password_new()}
             </label>
             <input
@@ -226,7 +238,10 @@
             />
           </div>
           <div>
-            <label for="create-role" class="block text-sm text-neutral-700 mb-1">
+            <label
+              for="create-role"
+              class="block text-sm text-neutral-700 mb-1"
+            >
               {m.user_edit_role()}
             </label>
             <select
@@ -251,9 +266,17 @@
     variant="gray"
     rowKey={(row: User) => row.id}
     columns={[
-      { header: m.login_username(), className: "text-sm text-gray-600", cell: usernameCell },
+      {
+        header: m.login_username(),
+        className: "text-sm text-gray-600",
+        cell: usernameCell,
+      },
       { header: m.user_edit_name(), cell: nameCell },
-      { header: m.user_edit_role(), className: "text-sm text-gray-600", cell: roleCell },
+      {
+        header: m.user_edit_role(),
+        className: "text-sm text-gray-600",
+        cell: roleCell,
+      },
       { header: m.staff_status(), cell: statusCell },
       ...(isAdmin ? [{ header: "", cell: actionsCell }] : []),
     ]}
@@ -338,8 +361,12 @@
           </select>
         </div>
         <div>
-          <label for="edit-password" class="block text-sm text-neutral-700 mb-1">
-            {m.user_password_new()} <span class="text-neutral-400">(opcional)</span>
+          <label
+            for="edit-password"
+            class="block text-sm text-neutral-700 mb-1"
+          >
+            {m.user_password_new()}
+            <span class="text-neutral-400">(opcional)</span>
           </label>
           <input
             id="edit-password"
@@ -350,7 +377,8 @@
         </div>
       </div>
       <div class="flex gap-2 justify-end">
-        <Button variant="icon" onclick={() => (editUser = null)}>&times;</Button>
+        <Button variant="icon" onclick={() => (editUser = null)}>&times;</Button
+        >
         <Button onclick={handleEdit} disabled={editLoading}>
           {m.user_edit()}
         </Button>
@@ -367,7 +395,9 @@
       </h3>
 
       {#if activateError}
-        <div class="bg-red-50 border border-red-200 rounded p-3 mb-3 text-red-700 text-sm">
+        <div
+          class="bg-red-50 border border-red-200 rounded p-3 mb-3 text-red-700 text-sm"
+        >
           {activateError}
         </div>
       {/if}
@@ -377,7 +407,10 @@
           <p class="text-sm text-neutral-600 mb-3">
             {m.user_deactivate_admin_confirm({ name: activateTarget.name })}
           </p>
-          <label for="activate-password" class="block text-sm text-neutral-700 mb-1">
+          <label
+            for="activate-password"
+            class="block text-sm text-neutral-700 mb-1"
+          >
             {m.user_deactivate_admin_password()}
           </label>
           <input
@@ -400,13 +433,19 @@
       <div class="flex gap-2 justify-end">
         <Button
           variant="icon"
-          onclick={() => { activateTarget = null; activateError = ""; }}
+          onclick={() => {
+            activateTarget = null;
+            activateError = "";
+          }}
         >
           &times;
         </Button>
         <Button
           onclick={handleActivation}
-          disabled={activateLoading || (activateTarget.active && activateTarget.role === "admin" && !activateAdminPassword.trim())}
+          disabled={activateLoading ||
+            (activateTarget.active &&
+              activateTarget.role === "admin" &&
+              !activateAdminPassword.trim())}
           variant={activateTarget.active ? "delete" : "primaryDark"}
         >
           {activateTarget.active ? m.user_deactivate() : m.user_activate()}

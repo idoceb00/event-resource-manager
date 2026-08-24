@@ -1,9 +1,5 @@
 import { events, products } from "$lib/data/mock-data";
-import type {
-  Reservation,
-  ReservationLine,
-  User,
-} from "$lib/types/domain";
+import type { Reservation, ReservationLine, User } from "$lib/types/domain";
 import type { ReservationService } from "../types";
 
 const mockUser: User = {

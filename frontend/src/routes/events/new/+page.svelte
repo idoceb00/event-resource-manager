@@ -42,7 +42,11 @@
         transport,
         extraInfo: extraInfo.trim() || undefined,
       });
-      goto(resolve(localizeHref(`/events/${event.id}`) as "/events/[id]", { id: event.id }));
+      goto(
+        resolve(localizeHref(`/events/${event.id}`) as "/events/[id]", {
+          id: event.id,
+        }),
+      );
     } catch (e) {
       if (e instanceof ApiError) {
         error = m.event_form_create_error();
@@ -67,14 +71,24 @@
   </div>
 
   {#if error}
-    <div class="bg-red-50 border border-red-200 rounded p-4 mb-4 text-red-700 text-sm">
+    <div
+      class="bg-red-50 border border-red-200 rounded p-4 mb-4 text-red-700 text-sm"
+    >
       {error}
     </div>
   {/if}
 
-  <form onsubmit={(e) => { e.preventDefault(); handleSubmit(); }} class="space-y-4">
+  <form
+    onsubmit={(e) => {
+      e.preventDefault();
+      handleSubmit();
+    }}
+    class="space-y-4"
+  >
     <div>
-      <label for="name" class="block text-sm font-medium text-neutral-700 mb-1">{m.event_form_name()}</label>
+      <label for="name" class="block text-sm font-medium text-neutral-700 mb-1"
+        >{m.event_form_name()}</label
+      >
       <input
         id="name"
         type="text"
@@ -85,7 +99,11 @@
 
     <div class="grid grid-cols-2 gap-4">
       <div>
-        <label for="startDate" class="block text-sm font-medium text-neutral-700 mb-1">{m.event_form_start_date()}</label>
+        <label
+          for="startDate"
+          class="block text-sm font-medium text-neutral-700 mb-1"
+          >{m.event_form_start_date()}</label
+        >
         <input
           id="startDate"
           type="datetime-local"
@@ -94,7 +112,11 @@
         />
       </div>
       <div>
-        <label for="endDate" class="block text-sm font-medium text-neutral-700 mb-1">{m.event_form_end_date()}</label>
+        <label
+          for="endDate"
+          class="block text-sm font-medium text-neutral-700 mb-1"
+          >{m.event_form_end_date()}</label
+        >
         <input
           id="endDate"
           type="datetime-local"
@@ -105,7 +127,11 @@
     </div>
 
     <div>
-      <label for="address" class="block text-sm font-medium text-neutral-700 mb-1">{m.event_form_address()}</label>
+      <label
+        for="address"
+        class="block text-sm font-medium text-neutral-700 mb-1"
+        >{m.event_form_address()}</label
+      >
       <input
         id="address"
         type="text"
@@ -121,11 +147,17 @@
         bind:checked={transport}
         class="rounded border-neutral-300"
       />
-      <label for="transport" class="text-sm font-medium text-neutral-700">{m.event_form_transport()}</label>
+      <label for="transport" class="text-sm font-medium text-neutral-700"
+        >{m.event_form_transport()}</label
+      >
     </div>
 
     <div>
-      <label for="extraInfo" class="block text-sm font-medium text-neutral-700 mb-1">{m.event_form_extra_info()}</label>
+      <label
+        for="extraInfo"
+        class="block text-sm font-medium text-neutral-700 mb-1"
+        >{m.event_form_extra_info()}</label
+      >
       <textarea
         id="extraInfo"
         bind:value={extraInfo}

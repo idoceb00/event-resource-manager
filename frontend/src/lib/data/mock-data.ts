@@ -1,7 +1,4 @@
-import type {
-  Equipment,
-  Event,
-} from "$lib/types/domain";
+import type { Equipment, Event } from "$lib/types/domain";
 
 /**
  * Seed data for the UI. Values are preserved from the original design mockup so

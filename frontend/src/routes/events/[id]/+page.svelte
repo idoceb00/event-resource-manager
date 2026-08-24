@@ -98,16 +98,13 @@
 
   // --- Reserve form ---
   let showReserveForm = $state(false);
-  let pendingLines = $state<
-    Array<{ equipmentId: string; quantity: number }>
-  >([]);
+  let pendingLines = $state<Array<{ equipmentId: string; quantity: number }>>(
+    [],
+  );
   let reserveSaving = $state(false);
 
   function addPendingLine() {
-    pendingLines = [
-      ...pendingLines,
-      { equipmentId: "", quantity: 1 },
-    ];
+    pendingLines = [...pendingLines, { equipmentId: "", quantity: 1 }];
   }
 
   function removePendingLine(index: number) {
@@ -141,14 +138,14 @@
       );
 
       if (result.failed === 0) {
-        toast.show(m.reserve_success({ succeeded: result.succeeded, suffix: "" }));
+        toast.show(
+          m.reserve_success({ succeeded: result.succeeded, suffix: "" }),
+        );
       } else if (result.succeeded === 0) {
         toast.show(result.errors[0] ?? "Error");
       } else {
         const suffix = m.reserve_suffix_failed({ failed: result.failed });
-        toast.show(
-          m.reserve_success({ succeeded: result.succeeded, suffix }),
-        );
+        toast.show(m.reserve_success({ succeeded: result.succeeded, suffix }));
       }
 
       showReserveForm = false;
@@ -203,7 +200,10 @@
           </Button>
         {:else}
           <a
-            href={resolve(localizeHref(`/events/${event.id}/edit`) as "/events/[id]/edit", { id: event.id })}
+            href={resolve(
+              localizeHref(`/events/${event.id}/edit`) as "/events/[id]/edit",
+              { id: event.id },
+            )}
           >
             <Button variant="secondary">
               <Pencil class="w-4 h-4 mr-1" />
@@ -239,7 +239,10 @@
   <div class="mb-6">
     <div class="flex items-center justify-between mb-3">
       <h2 class="text-lg font-medium">{m.eventdetail_performances()}</h2>
-      <Button variant="secondary" onclick={() => (showPerformanceForm = !showPerformanceForm)}>
+      <Button
+        variant="secondary"
+        onclick={() => (showPerformanceForm = !showPerformanceForm)}
+      >
         <Plus class="w-4 h-4 mr-1" />
         {m.performance_add()}
       </Button>
@@ -248,34 +251,85 @@
     {#if showPerformanceForm}
       <div class="border rounded p-4 bg-gray-50 mb-4">
         {#if perfError}
-          <div class="bg-red-50 border border-red-200 rounded p-3 mb-3 text-red-700 text-sm">
+          <div
+            class="bg-red-50 border border-red-200 rounded p-3 mb-3 text-red-700 text-sm"
+          >
             {perfError}
           </div>
         {/if}
-        <form onsubmit={(e) => { e.preventDefault(); handleAddPerformance(); }} class="space-y-3">
+        <form
+          onsubmit={(e) => {
+            e.preventDefault();
+            handleAddPerformance();
+          }}
+          class="space-y-3"
+        >
           <div class="grid grid-cols-2 gap-3">
             <div>
-              <label for="perfName" class="block text-sm font-medium text-neutral-700 mb-1">{m.performance_form_name()}</label>
-              <input id="perfName" type="text" bind:value={perfName} class="w-full border border-neutral-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900" />
+              <label
+                for="perfName"
+                class="block text-sm font-medium text-neutral-700 mb-1"
+                >{m.performance_form_name()}</label
+              >
+              <input
+                id="perfName"
+                type="text"
+                bind:value={perfName}
+                class="w-full border border-neutral-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900"
+              />
             </div>
             <div>
-              <label for="perfDuration" class="block text-sm font-medium text-neutral-700 mb-1">{m.performance_form_duration()}</label>
-              <input id="perfDuration" type="number" min="1" bind:value={perfDuration} class="w-full border border-neutral-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900" />
+              <label
+                for="perfDuration"
+                class="block text-sm font-medium text-neutral-700 mb-1"
+                >{m.performance_form_duration()}</label
+              >
+              <input
+                id="perfDuration"
+                type="number"
+                min="1"
+                bind:value={perfDuration}
+                class="w-full border border-neutral-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900"
+              />
             </div>
           </div>
           <div class="grid grid-cols-2 gap-3">
             <div>
-              <label for="perfStartTime" class="block text-sm font-medium text-neutral-700 mb-1">{m.performance_form_start_time()}</label>
-              <input id="perfStartTime" type="time" bind:value={perfStartTime} class="w-full border border-neutral-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900" />
+              <label
+                for="perfStartTime"
+                class="block text-sm font-medium text-neutral-700 mb-1"
+                >{m.performance_form_start_time()}</label
+              >
+              <input
+                id="perfStartTime"
+                type="time"
+                bind:value={perfStartTime}
+                class="w-full border border-neutral-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900"
+              />
             </div>
             <div>
-              <label for="perfRehearsalTime" class="block text-sm font-medium text-neutral-700 mb-1">{m.performance_form_rehearsal_time()}</label>
-              <input id="perfRehearsalTime" type="time" bind:value={perfRehearsalTime} class="w-full border border-neutral-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900" />
+              <label
+                for="perfRehearsalTime"
+                class="block text-sm font-medium text-neutral-700 mb-1"
+                >{m.performance_form_rehearsal_time()}</label
+              >
+              <input
+                id="perfRehearsalTime"
+                type="time"
+                bind:value={perfRehearsalTime}
+                class="w-full border border-neutral-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900"
+              />
             </div>
           </div>
           <div class="flex justify-end gap-2">
-            <Button variant="secondary" type="button" onclick={() => (showPerformanceForm = false)}>Cancelar</Button>
-            <Button type="submit" disabled={perfSaving}>{perfSaving ? "..." : m.performance_add()}</Button>
+            <Button
+              variant="secondary"
+              type="button"
+              onclick={() => (showPerformanceForm = false)}>Cancelar</Button
+            >
+            <Button type="submit" disabled={perfSaving}
+              >{perfSaving ? "..." : m.performance_add()}</Button
+            >
           </div>
         </form>
       </div>
@@ -284,12 +338,16 @@
     {#if event.performances.length > 0}
       <div class="space-y-2">
         {#each event.performances as performance (performance.id)}
-          <div class="border rounded p-3 bg-gray-50 flex items-start justify-between">
+          <div
+            class="border rounded p-3 bg-gray-50 flex items-start justify-between"
+          >
             <div>
               <p class="font-medium">{performance.name}</p>
               <p class="text-sm text-gray-600">
                 {m.eventdetail_performance_start()}: {performance.startTime}
-                · {m.eventdetail_performance_duration({ minutes: performance.duration })}
+                · {m.eventdetail_performance_duration({
+                  minutes: performance.duration,
+                })}
                 · {m.eventdetail_performance_rehearsal()}: {performance.rehearsalTime}
               </p>
             </div>
@@ -313,7 +371,13 @@
       <h2 class="text-lg font-medium">
         {m.eventdetail_reservations({ count: reservationLines.length })}
       </h2>
-      <Button variant="secondary" onclick={() => { showReserveForm = !showReserveForm; if (showReserveForm && pendingLines.length === 0) addPendingLine(); }}>
+      <Button
+        variant="secondary"
+        onclick={() => {
+          showReserveForm = !showReserveForm;
+          if (showReserveForm && pendingLines.length === 0) addPendingLine();
+        }}
+      >
         <Plus class="w-4 h-4 mr-1" />
         {m.reserve_form_title()}
       </Button>
@@ -325,32 +389,52 @@
           <div class="flex items-end gap-3">
             <div class="flex-1">
               {#if i === 0}
-                <label class="block text-sm font-medium text-neutral-700 mb-1">{m.reserve_form_equipment()}</label>
+                <label class="block text-sm font-medium text-neutral-700 mb-1"
+                  >{m.reserve_form_equipment()}</label
+                >
               {/if}
               <select
                 value={line.equipmentId}
-                onchange={(e) => updatePendingLine(i, "equipmentId", (e.target as HTMLSelectElement).value)}
+                onchange={(e) =>
+                  updatePendingLine(
+                    i,
+                    "equipmentId",
+                    (e.target as HTMLSelectElement).value,
+                  )}
                 class="w-full border border-neutral-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900"
               >
                 <option value="">{m.reserve_select_equipment()}</option>
                 {#each catalogue as eq (eq.id)}
-                  <option value={eq.id}>{eq.name} ({categoryLabel[eq.category]()})</option>
+                  <option value={eq.id}
+                    >{eq.name} ({categoryLabel[eq.category]()})</option
+                  >
                 {/each}
               </select>
             </div>
             <div class="w-24">
               {#if i === 0}
-                <label class="block text-sm font-medium text-neutral-700 mb-1">{m.reserve_form_quantity()}</label>
+                <label class="block text-sm font-medium text-neutral-700 mb-1"
+                  >{m.reserve_form_quantity()}</label
+                >
               {/if}
               <input
                 type="number"
                 min="1"
                 value={line.quantity}
-                oninput={(e) => updatePendingLine(i, "quantity", Number((e.target as HTMLInputElement).value))}
+                oninput={(e) =>
+                  updatePendingLine(
+                    i,
+                    "quantity",
+                    Number((e.target as HTMLInputElement).value),
+                  )}
                 class="w-full border border-neutral-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900"
               />
             </div>
-            <Button variant="icon" onclick={() => removePendingLine(i)} aria-label="Remove">
+            <Button
+              variant="icon"
+              onclick={() => removePendingLine(i)}
+              aria-label="Remove"
+            >
               <Trash2 class="w-4 h-4" />
             </Button>
           </div>
@@ -362,12 +446,19 @@
             {m.reserve_form_add_line()}
           </Button>
           <div class="flex gap-2">
-            <Button variant="secondary" onclick={() => { showReserveForm = false; pendingLines = []; }}>
+            <Button
+              variant="secondary"
+              onclick={() => {
+                showReserveForm = false;
+                pendingLines = [];
+              }}
+            >
               {m.reserve_form_cancel()}
             </Button>
             <Button
               onclick={handleReserve}
-              disabled={reserveSaving || pendingLines.every((l) => !l.equipmentId)}
+              disabled={reserveSaving ||
+                pendingLines.every((l) => !l.equipmentId)}
             >
               {reserveSaving ? "..." : m.reserve_form_submit()}
             </Button>
@@ -428,7 +519,9 @@
       <Button variant="delete" onclick={() => handleDeleteLine(row.id)}>
         {m.event_delete_confirm_title()}
       </Button>
-      <Button variant="icon" onclick={() => (deleteLineId = null)}>&times;</Button>
+      <Button variant="icon" onclick={() => (deleteLineId = null)}
+        >&times;</Button
+      >
     </div>
   {:else}
     <button

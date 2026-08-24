@@ -1,8 +1,4 @@
-import type {
-  Equipment,
-  Event,
-  Reservation,
-} from "$lib/types/domain";
+import type { Equipment, Event, Reservation } from "$lib/types/domain";
 
 /**
  * Pure selection/aggregation helpers for the dashboard. Kept out of components

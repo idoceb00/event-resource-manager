@@ -49,8 +49,9 @@ export const apiEquipmentService: EquipmentService = {
   },
 
   async getCatalogue(): Promise<Equipment[]> {
-    const response =
-      await apiClient.get<BackendEquipmentResponse[]>("/api/equipment/catalogue");
+    const response = await apiClient.get<BackendEquipmentResponse[]>(
+      "/api/equipment/catalogue",
+    );
     return response.map(mapEquipment);
   },
 

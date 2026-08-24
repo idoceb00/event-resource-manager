@@ -1,8 +1,5 @@
 import { apiClient } from "$lib/api/client";
-import type {
-  Event,
-  Performance,
-} from "$lib/types/domain";
+import type { Event, Performance } from "$lib/types/domain";
 import type { EventService } from "../types";
 
 interface EventResponse {

@@ -6,7 +6,8 @@
  * of an HTTP response.
  */
 
-export type EquipmentCategory = "SOUND" | "LIGHTING" | "MOTORS_AND_STRUCTURES" | "VIDEO";
+export type EquipmentCategory =
+  "SOUND" | "LIGHTING" | "MOTORS_AND_STRUCTURES" | "VIDEO";
 
 export type EquipmentStatus = "CATALOGUED" | "DECATALOGUED";
 

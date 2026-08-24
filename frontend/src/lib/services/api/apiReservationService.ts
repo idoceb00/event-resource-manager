@@ -1,10 +1,5 @@
 import { apiClient, ApiError } from "$lib/api/client";
-import type {
-  Equipment,
-  Event,
-  Reservation,
-  User,
-} from "$lib/types/domain";
+import type { Equipment, Event, Reservation, User } from "$lib/types/domain";
 import type { CreateReservationResult, ReservationService } from "../types";
 
 interface BackendEquipmentResponse {
