@@ -67,6 +67,23 @@ export interface EquipmentService {
 export interface UserService {
   getUsers(): Promise<User[]>;
   getUserById(id: string): Promise<User>;
+  createUser(data: {
+    username: string;
+    name: string;
+    password: string;
+    role: "admin" | "employee";
+    active: boolean;
+  }): Promise<User>;
+  updateUser(
+    id: string,
+    data: { name?: string; role?: "admin" | "employee" },
+  ): Promise<User>;
+  changePassword(id: string, newPassword: string): Promise<void>;
+  setActivation(
+    id: string,
+    active: boolean,
+    confirmPassword?: string,
+  ): Promise<void>;
 }
 
 export interface CreateReservationResult {

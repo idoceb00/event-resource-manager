@@ -66,6 +66,8 @@ export const apiClient = {
 
   post: <T>(path: string, body?: unknown) => request<T>(path, "POST", { body }),
 
+  put: <T>(path: string, body?: unknown) => request<T>(path, "PUT", { body }),
+
   patch: <T>(path: string, body?: unknown) =>
     request<T>(path, "PATCH", { body }),
 

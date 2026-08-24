@@ -32,4 +32,53 @@ export const apiUserService: UserService = {
     );
     return mapUser(response);
   },
+
+  async createUser(data: {
+    username: string;
+    name: string;
+    password: string;
+    role: "admin" | "employee";
+    active: boolean;
+  }): Promise<User> {
+    const response = await apiClient.post<BackendUserResponse>("/api/users", {
+      username: data.username,
+      name: data.name,
+      password: data.password,
+      role: data.role === "admin" ? "ADMINISTRATOR" : "EMPLOYEE",
+      active: data.active,
+    });
+    return mapUser(response);
+  },
+
+  async updateUser(
+    id: string,
+    data: { name?: string; role?: "admin" | "employee" },
+  ): Promise<User> {
+    const body: Record<string, unknown> = {};
+    if (data.name !== undefined) body.name = data.name;
+    if (data.role !== undefined)
+      body.role = data.role === "admin" ? "ADMINISTRATOR" : "EMPLOYEE";
+    const response = await apiClient.put<BackendUserResponse>(
+      `/api/users/${id}`,
+      body,
+    );
+    return mapUser(response);
+  },
+
+  async changePassword(id: string, newPassword: string): Promise<void> {
+    await apiClient.patch(`/api/users/${id}/password`, {
+      newPassword,
+    });
+  },
+
+  async setActivation(
+    id: string,
+    active: boolean,
+    confirmPassword?: string,
+  ): Promise<void> {
+    await apiClient.patch(`/api/users/${id}/activation`, {
+      active,
+      confirmPassword: confirmPassword ?? null,
+    });
+  },
 };
