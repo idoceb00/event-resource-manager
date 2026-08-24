@@ -11,10 +11,12 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "users")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
@@ -26,6 +28,9 @@ public class User {
   @Column(nullable = false, unique = true)
   private String username;
 
+  @Column(nullable = true)
+  private String name;
+
   @Column(nullable = false)
   private String passwordHash;
 
@@ -36,8 +41,9 @@ public class User {
   @Column(nullable = false)
   private boolean active = true;
 
-  public User(String username, String passwordHash, UserRole role) {
+  public User(String username, String name, String passwordHash, UserRole role) {
     this.username = username;
+    this.name = name;
     this.passwordHash = passwordHash;
     this.role = role;
     this.active = true;

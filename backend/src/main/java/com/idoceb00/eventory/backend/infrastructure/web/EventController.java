@@ -6,10 +6,12 @@ import com.idoceb00.eventory.backend.domain.model.Performance;
 import com.idoceb00.eventory.backend.domain.service.DuplicatePerformanceException;
 import com.idoceb00.eventory.backend.domain.service.EntityNotFoundException;
 import com.idoceb00.eventory.backend.infrastructure.persistence.EventRepository;
+import com.idoceb00.eventory.backend.infrastructure.persistence.ReservationRepository;
 import com.idoceb00.eventory.backend.infrastructure.web.dto.CreateEventRequest;
 import com.idoceb00.eventory.backend.infrastructure.web.dto.CreatePerformanceRequest;
 import com.idoceb00.eventory.backend.infrastructure.web.dto.EventResponse;
 import com.idoceb00.eventory.backend.infrastructure.web.dto.PerformanceResponse;
+import com.idoceb00.eventory.backend.infrastructure.web.dto.ReservationResponse;
 import com.idoceb00.eventory.backend.infrastructure.web.dto.UpdateEventRequest;
 import jakarta.validation.Valid;
 import java.net.URI;
@@ -30,10 +32,15 @@ public class EventController {
 
   private final EventRepository eventRepository;
   private final EventService eventService;
+  private final ReservationRepository reservationRepository;
 
-  public EventController(EventRepository eventRepository, EventService eventService) {
+  public EventController(
+      EventRepository eventRepository,
+      EventService eventService,
+      ReservationRepository reservationRepository) {
     this.eventRepository = eventRepository;
     this.eventService = eventService;
+    this.reservationRepository = reservationRepository;
   }
 
   @GetMapping
@@ -142,5 +149,15 @@ public class EventController {
   public ResponseEntity<Void> delete(@PathVariable Long id) {
     eventService.deleteEvent(id);
     return ResponseEntity.noContent().build();
+  }
+
+  @GetMapping("/{eventId}/reservations")
+  public List<ReservationResponse> findReservations(@PathVariable Long eventId) {
+    eventRepository
+        .findById(eventId)
+        .orElseThrow(() -> new EntityNotFoundException("Event not found: " + eventId));
+    return reservationRepository.findByEventId(eventId).stream()
+        .map(ReservationResponse::fromEntity)
+        .toList();
   }
 }
