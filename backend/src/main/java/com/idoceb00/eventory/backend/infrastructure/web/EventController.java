@@ -3,7 +3,6 @@ package com.idoceb00.eventory.backend.infrastructure.web;
 import com.idoceb00.eventory.backend.application.usecase.EventService;
 import com.idoceb00.eventory.backend.domain.model.Event;
 import com.idoceb00.eventory.backend.domain.model.Performance;
-import com.idoceb00.eventory.backend.domain.service.DuplicatePerformanceException;
 import com.idoceb00.eventory.backend.domain.service.EntityNotFoundException;
 import com.idoceb00.eventory.backend.infrastructure.persistence.EventRepository;
 import com.idoceb00.eventory.backend.infrastructure.persistence.ReservationRepository;
@@ -84,31 +83,7 @@ public class EventController {
   @PostMapping("/{eventId}/performances")
   public ResponseEntity<PerformanceResponse> createPerformance(
       @PathVariable Long eventId, @Valid @RequestBody CreatePerformanceRequest request) {
-    Event event =
-        eventRepository
-            .findById(eventId)
-            .orElseThrow(() -> new EntityNotFoundException("Event not found: " + eventId));
-
-    Performance performance =
-        new Performance(
-            request.name(), request.startTime(), request.duration(), request.rehearsalTime());
-
-    if (!event.canAddPerformance(performance)) {
-      throw new DuplicatePerformanceException(
-          "Duplicate performance: a performance with name '"
-              + request.name()
-              + "', start time "
-              + request.startTime()
-              + ", duration "
-              + request.duration()
-              + " and rehearsal time "
-              + request.rehearsalTime()
-              + " already exists in this event");
-    }
-
-    event.addPerformance(performance);
-    Event saved = eventRepository.save(event);
-    Performance savedPerformance = saved.getPerformances().getFirst();
+    Performance savedPerformance = eventService.createPerformance(eventId, request);
     return ResponseEntity.created(
             URI.create("/api/events/" + eventId + "/performances/" + savedPerformance.getId()))
         .body(PerformanceResponse.fromEntity(savedPerformance));

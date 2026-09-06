@@ -3,7 +3,6 @@ package com.idoceb00.eventory.backend.infrastructure.web;
 import com.idoceb00.eventory.backend.application.usecase.EquipmentService;
 import com.idoceb00.eventory.backend.domain.model.Equipment;
 import com.idoceb00.eventory.backend.domain.model.EquipmentStatus;
-import com.idoceb00.eventory.backend.domain.service.DuplicateEquipmentException;
 import com.idoceb00.eventory.backend.domain.service.EntityNotFoundException;
 import com.idoceb00.eventory.backend.infrastructure.persistence.EquipmentRepository;
 import com.idoceb00.eventory.backend.infrastructure.web.dto.AdjustStockRequest;
@@ -58,14 +57,8 @@ public class EquipmentController {
   @PostMapping
   public ResponseEntity<EquipmentResponse> create(
       @Valid @RequestBody CreateEquipmentRequest request) {
-    if (equipmentRepository.existsByName(request.name())) {
-      throw new DuplicateEquipmentException(
-          "Equipment with name '" + request.name() + "' already exists");
-    }
-    Equipment equipment =
-        new Equipment(
-            request.name(), request.category(), EquipmentStatus.CATALOGUED, request.stock());
-    Equipment saved = equipmentRepository.save(equipment);
+    Equipment saved =
+        equipmentService.createEquipment(request.name(), request.category(), request.stock());
     return ResponseEntity.created(URI.create("/api/equipment/" + saved.getId()))
         .body(EquipmentResponse.fromEntity(saved));
   }
