@@ -366,7 +366,7 @@
             class="block text-sm text-neutral-700 mb-1"
           >
             {m.user_password_new()}
-            <span class="text-neutral-400">(opcional)</span>
+            <span class="text-neutral-400">{m.user_password_optional()}</span>
           </label>
           <input
             id="edit-password"
@@ -426,7 +426,7 @@
         {/if}
       {:else}
         <p class="text-sm text-neutral-600 mb-4">
-          Activar usuario "{activateTarget.name}"?
+          {m.user_activate_confirm({ name: activateTarget.name })}
         </p>
       {/if}
 

@@ -6,6 +6,7 @@
   import { m } from "$lib/paraglide/messages";
   import { localizeHref } from "$lib/paraglide/runtime";
   import { ApiError } from "$lib/api/client";
+  import { toBackendDateTime } from "$lib/utils/dates";
 
   let name = $state("");
   let startDate = $state("");
@@ -15,11 +16,6 @@
   let extraInfo = $state("");
   let error = $state("");
   let saving = $state(false);
-
-  function toBackendDateTime(localValue: string): string {
-    if (!localValue) return "";
-    return localValue.replace("T", "T") + ":00";
-  }
 
   async function handleSubmit() {
     error = "";
@@ -172,7 +168,7 @@
         type="button"
         onclick={() => goto(resolve(localizeHref("/events") as "/events"))}
       >
-        Cancelar
+        {m.event_form_cancel()}
       </Button>
       <Button type="submit" disabled={saving}>
         {saving ? "..." : m.event_form_create_title()}
