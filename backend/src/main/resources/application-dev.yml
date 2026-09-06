@@ -20,6 +20,12 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
 
+app:
+  seed:
+    admin-username: admin
+    admin-password: admin
+    admin-display-name: Admin
+
 # Local HTTP dev: secure cookie cannot be sent over plain HTTP, so we
 # override it here. In production (HTTPS) this should be true.
 server:
