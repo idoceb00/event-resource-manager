@@ -7,10 +7,23 @@ import java.time.LocalDateTime;
  * value" for name, startDate, endDate, and transport. For address and extraInfo, {@code null}
  * explicitly clears the field (these are legitimately optional and can be empty).
  */
+@EndDateAfterStartDate
 public record UpdateEventRequest(
     String name,
     LocalDateTime startDate,
     LocalDateTime endDate,
     String address,
     Boolean transport,
-    String extraInfo) {}
+    String extraInfo)
+    implements EndDateAware {
+
+  @Override
+  public LocalDateTime getStartDate() {
+    return startDate;
+  }
+
+  @Override
+  public LocalDateTime getEndDate() {
+    return endDate;
+  }
+}

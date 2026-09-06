@@ -57,16 +57,14 @@ public class EventController {
   }
 
   @PatchMapping("/{id}")
-  public EventResponse update(@PathVariable Long id, @RequestBody UpdateEventRequest request) {
+  public EventResponse update(
+      @PathVariable Long id, @Valid @RequestBody UpdateEventRequest request) {
     Event updated = eventService.updateEvent(id, request);
     return EventResponse.fromEntity(updated);
   }
 
   @PostMapping
   public ResponseEntity<EventResponse> create(@Valid @RequestBody CreateEventRequest request) {
-    if (request.startDate().isAfter(request.endDate())) {
-      throw new IllegalArgumentException("Event end date must be after start date");
-    }
     Event event =
         new Event(
             request.name(),
