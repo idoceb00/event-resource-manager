@@ -45,7 +45,7 @@
   async function handleAddPerformance() {
     perfError = "";
     if (!perfName.trim() || !perfStartTime || !perfRehearsalTime) {
-      perfError = "Todos los campos son obligatorios";
+      perfError = m.performance_form_fields_required();
       return;
     }
     perfSaving = true;
@@ -325,7 +325,8 @@
             <Button
               variant="secondary"
               type="button"
-              onclick={() => (showPerformanceForm = false)}>Cancelar</Button
+              onclick={() => (showPerformanceForm = false)}
+              >{m.performance_form_cancel()}</Button
             >
             <Button type="submit" disabled={perfSaving}
               >{perfSaving ? "..." : m.performance_add()}</Button
@@ -433,7 +434,7 @@
             <Button
               variant="icon"
               onclick={() => removePendingLine(i)}
-              aria-label="Remove"
+              aria-label={m.common_remove()}
             >
               <Trash2 class="w-4 h-4" />
             </Button>

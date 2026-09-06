@@ -40,6 +40,11 @@ export function formatDateRangeWithYear(
   return `${formatDate(start, locale)} - ${formatDate(end, locale)}`;
 }
 
+export function toBackendDateTime(localValue: string): string {
+  if (!localValue) return "";
+  return localValue + ":00";
+}
+
 export function formatMonthYear(date: Date, locale: string): string {
   return date.toLocaleDateString(locale, {
     month: "long",

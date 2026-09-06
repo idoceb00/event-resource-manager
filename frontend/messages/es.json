@@ -130,6 +130,7 @@
   "event_form_date_invalid": "La fecha de fin debe ser posterior a la fecha de inicio",
   "event_form_name_required": "El nombre es obligatorio",
   "event_form_dates_required": "Las fechas son obligatorias",
+  "event_form_cancel": "Cancelar",
   "performance_add": "Anadir actuacion",
   "performance_delete": "Eliminar",
   "performance_delete_confirm": "Se eliminara esta actuacion.",
@@ -143,6 +144,8 @@
   "performance_form_duration": "Duracion (minutos)",
   "performance_form_rehearsal_time": "Hora de ensayo",
   "performance_form_create_title": "Anadir actuacion",
+  "performance_form_fields_required": "Todos los campos son obligatorios",
+  "performance_form_cancel": "Cancelar",
   "event_delete": "Eliminar evento",
   "event_delete_confirm_title": "Eliminar evento",
   "event_delete_confirm_body": "Se eliminara permanentemente el evento \"{name}\", sus {performances} actuacion(es) y sus {reservations} reserva(s). Esta accion no se puede deshacer.",
@@ -185,5 +188,8 @@
   "user_deactivate_wrong_password": "Contrasena incorrecta",
   "user_deactivate_error": "Error al desactivar el usuario",
   "user_activate_error": "Error al activar el usuario",
-  "user_show_deactivated": "Ver desactivados"
+  "user_show_deactivated": "Ver desactivados",
+  "user_password_optional": "(opcional)",
+  "user_activate_confirm": "Activar usuario \"{name}\"?",
+  "common_remove": "Quitar"
 }
