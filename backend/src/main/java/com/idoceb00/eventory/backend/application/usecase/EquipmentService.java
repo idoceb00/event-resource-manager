@@ -1,8 +1,10 @@
 package com.idoceb00.eventory.backend.application.usecase;
 
 import com.idoceb00.eventory.backend.domain.model.Equipment;
+import com.idoceb00.eventory.backend.domain.model.EquipmentCategory;
 import com.idoceb00.eventory.backend.domain.model.EquipmentStatus;
 import com.idoceb00.eventory.backend.domain.model.ReservationLine;
+import com.idoceb00.eventory.backend.domain.service.DuplicateEquipmentException;
 import com.idoceb00.eventory.backend.domain.service.EntityNotFoundException;
 import com.idoceb00.eventory.backend.domain.service.EquipmentStateException;
 import com.idoceb00.eventory.backend.domain.service.InsufficientStockException;
@@ -26,6 +28,15 @@ public class EquipmentService {
       EquipmentRepository equipmentRepository, ReservationRepository reservationRepository) {
     this.equipmentRepository = equipmentRepository;
     this.reservationRepository = reservationRepository;
+  }
+
+  @Transactional
+  public Equipment createEquipment(String name, EquipmentCategory category, int stock) {
+    if (equipmentRepository.existsByName(name)) {
+      throw new DuplicateEquipmentException("Equipment with name '" + name + "' already exists");
+    }
+    Equipment equipment = new Equipment(name, category, EquipmentStatus.CATALOGUED, stock);
+    return equipmentRepository.save(equipment);
   }
 
   @Transactional
